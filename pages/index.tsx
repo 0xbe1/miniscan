@@ -105,7 +105,7 @@ const Home: NextPage = () => {
             </p>
             <p className="mt-5 text-xl">
               Find a contract's startblock{' '}
-              <span className="font-bold text-purple-600">in 1 sec</span>{' '}
+              <span className="font-bold text-purple-600">easily</span>{' '}
             </p>
           </div>
           <input

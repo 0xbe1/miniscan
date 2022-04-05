@@ -12,12 +12,20 @@ export default async function handler(
 ) {
   const address = req.query['address'] as string
   try {
-    const { data } = await axios.get(
-      `https://api.etherscan.io/api?module=account&action=txlist&address=${address}&startblock=0&endblock=99999999&page=1&offset=1&sort=asc&apikey=${process.env.ETHERSCAN_API_KEY}`,
-      {
-        timeout: API_TIMEOUT,
-      }
-    )
+    const { data } = await axios.get('https://api.etherscan.io/api', {
+      params: {
+        module: 'account',
+        action: 'txlist',
+        address: address,
+        startblock: 0,
+        endblock: 99999999,
+        page: 1,
+        offset: 1,
+        sort: 'asc',
+        apikey: process.env.ETHERSCAN_API_KEY,
+      },
+      timeout: API_TIMEOUT,
+    })
     if (data.status === '1') {
       res.status(200).json({
         data: {

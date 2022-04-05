@@ -1,8 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Result } from '..'
+import { Network, Result } from '..'
 import axios from 'axios'
 
 const API_TIMEOUT = 5000
+
+type Config = {
+  [key: string]: { domain: string; apiKey: string }
+}
+
+const config: Config = {
+  ethereum: {
+    domain: 'etherscan.io',
+    apiKey: process.env.ETHERSCAN_API_KEY || '',
+  },
+  bsc: {
+    domain: 'bscscan.com',
+    apiKey: process.env.BSCSCAN_API_KEY || '',
+  },
+}
+
+// Uncomment to debug
+// axios.interceptors.request.use(request => {
+//   console.log('Starting Request', JSON.stringify(request, null, 2))
+//   return request
+// })
 
 // TODO: response type
 
@@ -11,21 +32,25 @@ export default async function handler(
   res: NextApiResponse<Result>
 ) {
   const address = req.query['address'] as string
+  const network = req.query['network'] as Network
   try {
-    const { data } = await axios.get('https://api.etherscan.io/api', {
-      params: {
-        module: 'account',
-        action: 'txlist',
-        address: address,
-        startblock: 0,
-        endblock: 99999999,
-        page: 1,
-        offset: 1,
-        sort: 'asc',
-        apikey: process.env.ETHERSCAN_API_KEY,
-      },
-      timeout: API_TIMEOUT,
-    })
+    const { data } = await axios.get(
+      `https://api.${config[network].domain}/api`,
+      {
+        params: {
+          module: 'account',
+          action: 'txlist',
+          address,
+          startblock: 0,
+          endblock: 99999999,
+          page: 1,
+          offset: 1,
+          sort: 'asc',
+          apikey: config[network].apiKey,
+        },
+        timeout: API_TIMEOUT,
+      }
+    )
     if (data.status === '1') {
       res.status(200).json({
         data: {
@@ -43,7 +68,7 @@ export default async function handler(
       })
     }
   } catch (error: any) {
-    // TODO: log error
+    console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)))
     res.status(500).json({
       data: {
         blockNumber: 0,

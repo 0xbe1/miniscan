@@ -19,7 +19,18 @@ function validateAddress(address: string): boolean {
 // TODO: add github link
 // TODO: add other apps info
 
-const Answer = ({ address, loading, result }: { address: string, loading: boolean, result: Result | null }) => {
+const Answer = ({
+  address,
+  loading,
+  result,
+}: {
+  address: string
+  loading: boolean
+  result: Result | null
+}) => {
+
+  const [copied, setCopied] = useState(false)
+
   if (!address) {
     return <p>Try it 👆</p>
   }
@@ -35,7 +46,18 @@ const Answer = ({ address, loading, result }: { address: string, loading: boolea
   if (result.error) {
     return <p>{result.error.msg} ❌</p>
   }
-  return <p className="text-purple-600">{result.data.blockNumber}</p>
+  return (
+    <p
+      className={`text-purple-600 ${copied ? 'select-all': ''}`}
+      onClick={async () => {
+        await navigator.clipboard.writeText(result.data.blockNumber.toString())
+        setCopied(true)
+      }
+      }
+    >
+      {result.data.blockNumber}
+    </p>
+  )
 }
 
 const Home: NextPage = () => {
@@ -82,7 +104,11 @@ const Home: NextPage = () => {
       <Head>
         <title>startblock</title>
         <link rel="icon" href="/favicon.ico" />
-        <script src="https://cdn.usefathom.com/script.js" data-site="USEASVFB" defer></script>
+        <script
+          src="https://cdn.usefathom.com/script.js"
+          data-site="USEASVFB"
+          defer
+        ></script>
       </Head>
 
       <main className="flex w-full flex-1 items-center sm:w-2/3 lg:w-1/3">
@@ -112,7 +138,7 @@ const Home: NextPage = () => {
             ref={inputElement}
           />
           <div className="mt-1 text-center text-xl">
-            <Answer address={address} loading={loading} result={result}/>
+            <Answer address={address} loading={loading} result={result} />
           </div>
         </div>
       </main>

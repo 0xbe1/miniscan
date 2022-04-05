@@ -16,7 +16,6 @@ function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
-// TODO: add github link
 // TODO: add other apps info
 
 const Answer = ({

@@ -2,6 +2,7 @@ import type { NextPage } from 'next'
 import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import Select from 'react-select'
 
 export type Result = {
   data: {
@@ -12,26 +13,38 @@ export type Result = {
   }
 }
 
+interface NetworkOption {
+  readonly value: Network
+  readonly label: string
+}
+
+const networkOptions: readonly NetworkOption[] = [
+  { value: 'ethereum', label: 'Ethereum' },
+  { value: 'bsc', label: 'BSC' },
+]
+
+export type Network = 'ethereum' | 'bsc'
+
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
-// TODO: add other apps info
-
 const Answer = ({
-  address,
+  isEmptyInput,
+  isValidInput,
   loading,
   result,
 }: {
-  address: string
+  isEmptyInput: boolean
+  isValidInput: boolean
   loading: boolean
   result: Result | null
 }) => {
-  if (!address) {
+  if (isEmptyInput) {
     return <p>Try it 👆</p>
   }
-  if (!validateAddress(address)) {
-    return <p>Invalid address ❌</p>
+  if (!isValidInput) {
+    return <p>Invalid input 🤔</p>
   }
   if (loading) {
     return <p>loading... ⏳</p>
@@ -54,34 +67,38 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const [wipAddress, setWipAddress] = useState('')
-  const [address, setAddress] = useState(wipAddress)
-  const [result, setResult] = useState<Result | null>(null)
+  const [network, setNetwork] = useState<Network | null>(null)
+  const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<Result | null>(null)
+
+  // derived states
+  const isEmptyInput: boolean = !network && !address
+  const isValidInput: boolean = network !== null && validateAddress(address)
 
   useEffect(() => {
     async function fetchData() {
       setLoading(true)
       try {
-        const { data } = await axios.get(`api/startblock?address=${address}`)
+        const { data } = await axios.get('api/startblock', {
+          params: {
+            network,
+            address,
+          },
+        })
         setResult(data)
       } catch (error: any) {
         setResult(null)
       }
       setLoading(false)
     }
-    if (validateAddress(address)) {
+    if (isValidInput) {
       fetchData()
     }
-  }, [address])
+  }, [address, network])
 
-  function handleChange(event: React.FormEvent<HTMLInputElement>) {
-    setWipAddress(event.currentTarget.value)
-  }
-
-  function handleSubmit(event: React.FormEvent<HTMLInputElement>) {
-    event.preventDefault()
-    setAddress(wipAddress)
+  function handleAddressChange(event: React.FormEvent<HTMLInputElement>) {
+    setAddress(event.currentTarget.value)
   }
 
   return (
@@ -107,23 +124,35 @@ const Home: NextPage = () => {
               <span className="font-bold text-purple-600">easily</span>{' '}
             </p>
           </div>
+          <Select
+            placeholder={'Select network'}
+            className="basic-single my-5 text-center"
+            classNamePrefix="select"
+            name="networks"
+            options={networkOptions}
+            onChange={(selected) => {
+              if (selected) {
+                setNetwork(selected.value)
+              }
+            }}
+          />
           <input
             type="text"
             className="form-control relative my-7 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-center text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="contract address"
             aria-label="Search"
             aria-describedby="button-addon2"
-            value={wipAddress}
-            onChange={handleChange}
-            onKeyPress={(e) => {
-              if (e.key === 'Enter') {
-                handleSubmit(e)
-              }
-            }}
+            value={address}
+            onChange={handleAddressChange}
             ref={inputElement}
           />
           <div className="mt-1 text-center text-xl">
-            <Answer address={address} loading={loading} result={result} />
+            <Answer
+              isEmptyInput={isEmptyInput}
+              isValidInput={isValidInput}
+              loading={loading}
+              result={result}
+            />
           </div>
         </div>
       </main>

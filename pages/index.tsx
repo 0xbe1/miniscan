@@ -16,6 +16,9 @@ function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
+// TODO: add github link
+// TODO: add other apps info
+
 const Answer = ({ address, loading, result }: { address: string, loading: boolean, result: Result | null }) => {
   if (!address) {
     return <p>Try it 👆</p>
@@ -79,6 +82,7 @@ const Home: NextPage = () => {
       <Head>
         <title>startblock</title>
         <link rel="icon" href="/favicon.ico" />
+        <script src="https://cdn.usefathom.com/script.js" data-site="USEASVFB" defer></script>
       </Head>
 
       <main className="flex w-full flex-1 items-center sm:w-2/3 lg:w-1/3">

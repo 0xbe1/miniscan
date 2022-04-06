@@ -29,6 +29,10 @@ const config: Config = {
     domain: 'arbiscan.io',
     apiKey: process.env.ARBISCAN_API_KEY || '',
   },
+  polygon: {
+    domain: 'polygonscan.com',
+    apiKey: process.env.POLYGONSCAN_API_KEY || '',
+  },
 }
 
 // Uncomment to debug

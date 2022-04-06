@@ -113,7 +113,7 @@ const Home: NextPage = () => {
         ></script>
       </Head>
 
-      <main className="flex w-full flex-1 items-center sm:w-2/3 lg:w-1/3">
+      <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-2/5">
         <div className="w-full">
           <div className=" text-center">
             <p className="bg-gradient-to-tr from-purple-600 to-blue-600 bg-clip-text text-6xl font-bold text-transparent">

@@ -5,7 +5,7 @@ import axios from 'axios'
 const API_TIMEOUT = 5000
 
 type Config = {
-  [key: string]: { domain: string; apiKey: string }
+  [key in Network]: { domain: string; apiKey: string }
 }
 
 const config: Config = {
@@ -20,6 +20,10 @@ const config: Config = {
   avalanche: {
     domain: 'snowtrace.io',
     apiKey: process.env.SNOWTRACE_API_KEY || '',
+  },
+  fantom: {
+    domain: 'ftmscan.com',
+    apiKey: process.env.FTMSCAN_API_KEY || '',
   },
 }
 

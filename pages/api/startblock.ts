@@ -25,6 +25,10 @@ const config: Config = {
     domain: 'ftmscan.com',
     apiKey: process.env.FTMSCAN_API_KEY || '',
   },
+  arbitrum: {
+    domain: 'arbiscan.io',
+    apiKey: process.env.ARBISCAN_API_KEY || '',
+  },
 }
 
 // Uncomment to debug

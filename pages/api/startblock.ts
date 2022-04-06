@@ -17,6 +17,10 @@ const config: Config = {
     domain: 'bscscan.com',
     apiKey: process.env.BSCSCAN_API_KEY || '',
   },
+  avalanche: {
+    domain: 'snowtrace.io',
+    apiKey: process.env.SNOWTRACE_API_KEY || '',
+  },
 }
 
 // Uncomment to debug

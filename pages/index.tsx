@@ -21,9 +21,10 @@ interface NetworkOption {
 const networkOptions: readonly NetworkOption[] = [
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'bsc', label: 'BSC' },
+  { value: 'avalanche', label: 'Avalanche' },
 ]
 
-export type Network = 'ethereum' | 'bsc'
+export type Network = 'ethereum' | 'bsc' | 'avalanche'
 
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)

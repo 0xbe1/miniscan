@@ -117,9 +117,9 @@ const Home: NextPage = () => {
         <title>startblock</title>
         <link rel="icon" href="/favicon.ico" />
         <script
-          src="https://cdn.usefathom.com/script.js"
-          data-site="USEASVFB"
-          defer
+          data-token="VLESW6URT5L5"
+          async
+          src="https://cdn.splitbee.io/sb.js"
         ></script>
       </Head>
 

@@ -41,6 +41,10 @@ const config: Config = {
     domain: 'api-optimistic.etherscan.io',
     apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || '',
   },
+  celo: {
+    domain: 'explorer.celo.org',
+    apiKey: '', // no api key needed
+  },
 }
 
 // Uncomment to debug

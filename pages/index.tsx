@@ -23,6 +23,7 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'aurora', label: 'Aurora' },
   { value: 'avalanche', label: 'Avalanche' },
   { value: 'bsc', label: 'BSC' },
+  { value: 'celo', label: 'Celo' },
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'fantom', label: 'Fantom' },
   { value: 'optimism', label: 'Optimism' },
@@ -30,14 +31,15 @@ const networkOptions: readonly NetworkOption[] = [
 ]
 
 export type Network =
-  | 'ethereum'
-  | 'bsc'
-  | 'avalanche'
-  | 'fantom'
   | 'arbitrum'
-  | 'polygon'
   | 'aurora'
+  | 'avalanche'
+  | 'bsc'
+  | 'celo'
+  | 'ethereum'
+  | 'fantom'
   | 'optimism'
+  | 'polygon'
 
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)

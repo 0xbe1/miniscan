@@ -25,6 +25,8 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'fantom', label: 'Fantom' },
   { value: 'arbitrum', label: 'Arbitrum' },
   { value: 'polygon', label: 'Polygon' },
+  { value: 'aurora', label: 'Aurora' },
+  { value: 'optimism', label: 'Optimism' },
 ]
 
 export type Network =
@@ -34,6 +36,8 @@ export type Network =
   | 'fantom'
   | 'arbitrum'
   | 'polygon'
+  | 'aurora'
+  | 'optimism'
 
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)

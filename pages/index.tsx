@@ -19,14 +19,14 @@ interface NetworkOption {
 }
 
 const networkOptions: readonly NetworkOption[] = [
-  { value: 'ethereum', label: 'Ethereum' },
-  { value: 'bsc', label: 'BSC' },
-  { value: 'avalanche', label: 'Avalanche' },
-  { value: 'fantom', label: 'Fantom' },
   { value: 'arbitrum', label: 'Arbitrum' },
-  { value: 'polygon', label: 'Polygon' },
   { value: 'aurora', label: 'Aurora' },
+  { value: 'avalanche', label: 'Avalanche' },
+  { value: 'bsc', label: 'BSC' },
+  { value: 'ethereum', label: 'Ethereum' },
+  { value: 'fantom', label: 'Fantom' },
   { value: 'optimism', label: 'Optimism' },
+  { value: 'polygon', label: 'Polygon' },
 ]
 
 export type Network =

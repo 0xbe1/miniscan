@@ -2,6 +2,8 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { Network, Result } from '..'
 import axios from 'axios'
 
+const logger = require('pino')()
+
 const API_TIMEOUT = 5000
 
 type Config = {
@@ -61,6 +63,7 @@ export default async function handler(
 ) {
   const address = req.query['address'] as string
   const network = req.query['network'] as Network
+  logger.info({ address, network })
   try {
     const { data } = await axios.get(`https://${config[network].domain}/api`, {
       params: {
@@ -83,6 +86,7 @@ export default async function handler(
         },
       })
     } else {
+      logger.warn(JSON.stringify(data))
       res.status(200).json({
         data: {
           blockNumber: 0,
@@ -93,7 +97,7 @@ export default async function handler(
       })
     }
   } catch (error: any) {
-    console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    logger.error(JSON.stringify(error, Object.getOwnPropertyNames(error)))
     res.status(500).json({
       data: {
         blockNumber: 0,

@@ -173,12 +173,20 @@ const Home: NextPage = () => {
           @0xbe1
         </a>
         &nbsp;
+        <a href="https://github.com/0xbe1/startblock">
+          <img src="github.svg" alt="GitHub" className="h-6" />
+        </a>
+        &nbsp;|&nbsp;Questions?&nbsp;
         <a href="https://discord.gg/vN2dTXeNsc">
           <img src="discord.svg" alt="Discord" className="h-6" />
         </a>
         &nbsp;
-        <a href="https://github.com/0xbe1/startblock">
-          <img src="github.svg" alt="GitHub" className="h-6" />
+        <a href="https://twitter.com/_0xbe1/status/1511638106554134530">
+          <img src="twitter.svg" alt="Twitter" className="h-6" />
+        </a>
+        &nbsp;
+        <a href="https://www.reddit.com/r/thegraph/comments/txi4c6/announcing_startblock_find_a_contracts_startblock/">
+          <img src="reddit.svg" alt="Reddit" className="h-6" />
         </a>
       </footer>
     </div>

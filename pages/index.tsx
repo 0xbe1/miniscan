@@ -177,7 +177,7 @@ const Home: NextPage = () => {
           <img src="github.svg" alt="GitHub" className="h-6" />
         </a>
         &nbsp;|&nbsp;Questions?&nbsp;
-        <a href="https://discord.gg/vN2dTXeNsc">
+        <a href="https://discord.gg/u5KUjNZ8wy">
           <img src="discord.svg" alt="Discord" className="h-6" />
         </a>
         &nbsp;

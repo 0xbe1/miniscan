@@ -3,6 +3,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
+import Tweet from './tweet'
 
 export type Result = {
   data: {
@@ -136,8 +137,8 @@ const Home: NextPage = () => {
               startblock
             </p>
             <p className="mt-5 text-xl">
-              Find a contract's startblock{' '}
-              <span className="font-bold text-purple-600">easily</span>{' '}
+              Find a contract's startblock networks{' '}
+              <span className="font-bold text-purple-600">easily</span>
             </p>
           </div>
           <Select
@@ -154,7 +155,7 @@ const Home: NextPage = () => {
           />
           <input
             type="text"
-            className="form-control relative my-7 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-center text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+            className="form-control relative my-4 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-center text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
             placeholder="contract address"
             aria-label="Search"
             aria-describedby="button-addon2"
@@ -162,7 +163,7 @@ const Home: NextPage = () => {
             onChange={handleAddressChange}
             ref={inputElement}
           />
-          <div className="mt-1 text-center text-xl">
+          <div className="my-4 text-center text-xl">
             <Answer
               isEmptyInput={isEmptyInput}
               isValidInput={isValidInput}
@@ -170,10 +171,17 @@ const Home: NextPage = () => {
               result={result}
             />
           </div>
+          <Tweet
+            name="nader dabit (🧱, 🚀) | sha.eth | nader.sol"
+            username="dabit3"
+            tweetUrl="https://twitter.com/dabit3/status/1512089488847257600"
+            authorUrl="https://twitter.com/dabit3"
+            profileImageUrl="https://pbs.twimg.com/profile_images/1496581535914414082/LB6_2C6f_400x400.jpg"
+          />
         </div>
       </main>
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
+      <footer className="flex h-16 w-full items-center justify-center border-t">
         By&nbsp;
         <a className="text-purple-600" href="https://github.com/0xbe1">
           @0xbe1

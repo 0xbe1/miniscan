@@ -42,26 +42,75 @@ export type Network =
   | 'optimism'
   | 'polygon'
 
+type Config = {
+  [key in Network]: { scanDomain: string; dethDomain: string }
+}
+
+const config: Config = {
+  ethereum: {
+    scanDomain: 'api.etherscan.io',
+    dethDomain: 'etherscan.deth.net',
+  },
+  bsc: {
+    scanDomain: 'api.bscscan.com',
+    dethDomain: 'bscscan.deth.net',
+  },
+  avalanche: {
+    scanDomain: 'api.snowtrace.io',
+    dethDomain: 'snowtrace.deth.net',
+  },
+  fantom: {
+    scanDomain: 'api.ftmscan.com',
+    dethDomain: 'ftmscan.deth.net',
+  },
+  arbitrum: {
+    scanDomain: 'api.arbiscan.io',
+    dethDomain: 'arbiscan.deth.net',
+  },
+  polygon: {
+    scanDomain: 'api.polygonscan.com',
+    dethDomain: 'polygonscan.deth.net',
+  },
+  aurora: {
+    scanDomain: 'api.aurorascan.dev',
+    dethDomain: '', // TODO
+  },
+  optimism: {
+    scanDomain: 'api-optimistic.etherscan.io',
+    dethDomain: 'optimistic.etherscan.deth.net',
+  },
+  celo: {
+    scanDomain: 'explorer.celo.org',
+    dethDomain: '', // TODO
+  },
+}
+
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
 const Answer = ({
-  isEmptyInput,
-  isValidInput,
   loading,
+  network,
+  address,
   result,
 }: {
-  isEmptyInput: boolean
-  isValidInput: boolean
   loading: boolean
+  network: Network | null
+  address: string
   result: Result | null
 }) => {
-  if (isEmptyInput) {
+  if (!network && !address) {
     return <p>Try it 👆</p>
   }
-  if (!isValidInput) {
-    return <p>Invalid input 🤔</p>
+  if (network === null) {
+    return <p>Choose a network 🤔</p>
+  }
+  if (address === '') {
+    return <p>Paste an address 🤔</p>
+  }
+  if (!validateAddress(address)) {
+    return <p>Invalid address 🤔</p>
   }
   if (loading) {
     return <p>loading... ⏳</p>
@@ -72,7 +121,37 @@ const Answer = ({
   if (result.error) {
     return <p>{result.error.msg} ❌</p>
   }
-  return <p className="text-purple-600">{result.data.blockNumber}</p>
+  const { scanDomain, dethDomain } = config[network]
+  return (
+    <div className="flex flex-row justify-around text-purple-600">
+      <div className="my-auto">Block #{result.data.blockNumber}</div>
+      <button
+        className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
+        onClick={() =>
+          window.open(
+            `http://${scanDomain}/api?module=contract&action=getabi&address=${address}&format=raw`,
+            '_blank'
+          )
+        }
+      >
+        View ABI
+      </button>
+      {dethDomain === '' ? (
+        <button disabled className="rounded-lg border-2 p-2 border-purple-300 text-gray-300">
+          View Code (soon)
+        </button>
+      ) : (
+        <button
+          className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
+          onClick={() =>
+            window.open(`https://${dethDomain}/address/${address}`, '_blank')
+          }
+        >
+          View Code
+        </button>
+      )}
+    </div>
+  )
 }
 
 const Home: NextPage = () => {
@@ -90,7 +169,6 @@ const Home: NextPage = () => {
   const [result, setResult] = useState<Result | null>(null)
 
   // derived states
-  const isEmptyInput: boolean = !network && !address
   const isValidInput: boolean = network !== null && validateAddress(address)
 
   useEffect(() => {
@@ -121,7 +199,7 @@ const Home: NextPage = () => {
   return (
     <div className="flex min-h-screen flex-col items-center font-mono">
       <Head>
-        <title>startblock</title>
+        <title>miniscan</title>
         <link rel="icon" href="/favicon.ico" />
         <script
           data-token="VLESW6URT5L5"
@@ -134,10 +212,10 @@ const Home: NextPage = () => {
         <div className="w-full">
           <div className=" text-center">
             <p className="bg-gradient-to-tr from-purple-600 to-blue-600 bg-clip-text text-6xl font-bold text-transparent">
-              startblock
+              miniscan
             </p>
             <p className="mt-5 text-xl">
-              Find a contract's startblock networks{' '}
+              Understand contracts {' '}
               <span className="font-bold text-purple-600">easily</span>
             </p>
           </div>
@@ -165,9 +243,9 @@ const Home: NextPage = () => {
           />
           <div className="my-4 text-center text-xl">
             <Answer
-              isEmptyInput={isEmptyInput}
-              isValidInput={isValidInput}
               loading={loading}
+              network={network}
+              address={address}
               result={result}
             />
           </div>

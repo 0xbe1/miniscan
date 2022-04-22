@@ -5,44 +5,44 @@ import axios from 'axios'
 const API_TIMEOUT = 5000
 
 type Config = {
-  [key in Network]: { domain: string; apiKey: string }
+  [key in Network]: { scanDomain: string; apiKey: string }
 }
 
 const config: Config = {
   ethereum: {
-    domain: 'api.etherscan.io',
+    scanDomain: 'api.etherscan.io',
     apiKey: process.env.ETHERSCAN_API_KEY || '',
   },
   bsc: {
-    domain: 'api.bscscan.com',
+    scanDomain: 'api.bscscan.com',
     apiKey: process.env.BSCSCAN_API_KEY || '',
   },
   avalanche: {
-    domain: 'api.snowtrace.io',
+    scanDomain: 'api.snowtrace.io',
     apiKey: process.env.SNOWTRACE_API_KEY || '',
   },
   fantom: {
-    domain: 'api.ftmscan.com',
+    scanDomain: 'api.ftmscan.com',
     apiKey: process.env.FTMSCAN_API_KEY || '',
   },
   arbitrum: {
-    domain: 'api.arbiscan.io',
+    scanDomain: 'api.arbiscan.io',
     apiKey: process.env.ARBISCAN_API_KEY || '',
   },
   polygon: {
-    domain: 'api.polygonscan.com',
+    scanDomain: 'api.polygonscan.com',
     apiKey: process.env.POLYGONSCAN_API_KEY || '',
   },
   aurora: {
-    domain: 'api.aurorascan.dev',
+    scanDomain: 'api.aurorascan.dev',
     apiKey: process.env.AURORASCAN_API_KEY || '',
   },
   optimism: {
-    domain: 'api-optimistic.etherscan.io',
+    scanDomain: 'api-optimistic.etherscan.io',
     apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || '',
   },
   celo: {
-    domain: 'explorer.celo.org',
+    scanDomain: 'explorer.celo.org',
     apiKey: '', // no api key needed
   },
 }
@@ -62,20 +62,23 @@ export default async function handler(
   const address = req.query['address'] as string
   const network = req.query['network'] as Network
   try {
-    const { data } = await axios.get(`https://${config[network].domain}/api`, {
-      params: {
-        module: 'account',
-        action: 'txlist',
-        address,
-        startblock: 0,
-        endblock: 99999999,
-        page: 1,
-        offset: 1,
-        sort: 'asc',
-        apikey: config[network].apiKey,
-      },
-      timeout: API_TIMEOUT,
-    })
+    const { data } = await axios.get(
+      `https://${config[network].scanDomain}/api`,
+      {
+        params: {
+          module: 'account',
+          action: 'txlist',
+          address,
+          startblock: 0,
+          endblock: 99999999,
+          page: 1,
+          offset: 1,
+          sort: 'asc',
+          apikey: config[network].apiKey,
+        },
+        timeout: API_TIMEOUT,
+      }
+    )
     if (data.status === '1') {
       res.status(200).json({
         data: {

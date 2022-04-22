@@ -124,7 +124,7 @@ const Answer = ({
   const { scanDomain, dethDomain } = config[network]
   return (
     <div className="flex flex-row justify-around text-purple-600">
-      <div className="my-auto">Block #{result.data.blockNumber}</div>
+      <div className="my-auto">Start Block #{result.data.blockNumber}</div>
       <button
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>

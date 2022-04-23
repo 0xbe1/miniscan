@@ -42,40 +42,6 @@ export type Network =
   | 'optimism'
   | 'polygon'
 
-type Config = {
-  [key in Network]: { dethDomain: string }
-}
-
-const config: Config = {
-  ethereum: {
-    dethDomain: 'etherscan.deth.net',
-  },
-  bsc: {
-    dethDomain: 'bscscan.deth.net',
-  },
-  avalanche: {
-    dethDomain: 'snowtrace.deth.net',
-  },
-  fantom: {
-    dethDomain: 'ftmscan.deth.net',
-  },
-  arbitrum: {
-    dethDomain: 'arbiscan.deth.net',
-  },
-  polygon: {
-    dethDomain: 'polygonscan.deth.net',
-  },
-  aurora: {
-    dethDomain: '', // TODO
-  },
-  optimism: {
-    dethDomain: 'optimistic.etherscan.deth.net',
-  },
-  celo: {
-    dethDomain: '', // TODO
-  },
-}
-
 function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
@@ -112,7 +78,6 @@ const Answer = ({
   if (result.error) {
     return <p>{result.error.msg} ❌</p>
   }
-  const { dethDomain } = config[network]
   return (
     <div className="flex flex-row justify-around text-purple-600">
       <div className="my-auto">Start Block #{result.data.blockNumber}</div>
@@ -127,23 +92,18 @@ const Answer = ({
       >
         View ABI
       </button>
-      {dethDomain === '' ? (
-        <button
-          disabled
-          className="rounded-lg border-2 border-purple-300 p-2 text-gray-300"
-        >
-          View Code (soon)
-        </button>
-      ) : (
-        <button
-          className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
-          onClick={() =>
-            window.open(`https://${dethDomain}/address/${address}`, '_blank')
-          }
-        >
-          View Code
-        </button>
-      )}
+
+      <button
+        className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
+        onClick={() =>
+          window.open(
+            `/api/sourcecode?network=${network}&address=${address}`,
+            '_blank'
+          )
+        }
+      >
+        View Code
+      </button>
     </div>
   )
 }

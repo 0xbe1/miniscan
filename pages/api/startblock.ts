@@ -8,7 +8,7 @@ type Config = {
   [key in Network]: { scanDomain: string; apiKey: string }
 }
 
-const config: Config = {
+export const config: Config = {
   ethereum: {
     scanDomain: 'api.etherscan.io',
     apiKey: process.env.ETHERSCAN_API_KEY || '',

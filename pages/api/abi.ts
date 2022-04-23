@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Network } from '..'
 import axios from 'axios'
-import prettier from 'prettier'
+// import prettier from 'prettier'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github.css'
 import { config } from './startblock'
 
 const API_TIMEOUT = 5000
@@ -30,7 +32,10 @@ export default async function handler(
       }
     )
     if (data.status === '1') {
-      res.status(200).json(prettier.format(data.result))
+      const abi = data.result
+      res.setHeader('Content-Type', 'text/html')
+      res.write(hljs.highlight(abi, { language: 'json' }).value)
+      res.end()
     } else {
       res.status(200).json({
         error: {

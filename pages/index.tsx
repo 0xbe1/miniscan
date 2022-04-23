@@ -43,44 +43,35 @@ export type Network =
   | 'polygon'
 
 type Config = {
-  [key in Network]: { scanDomain: string; dethDomain: string }
+  [key in Network]: { dethDomain: string }
 }
 
 const config: Config = {
   ethereum: {
-    scanDomain: 'api.etherscan.io',
     dethDomain: 'etherscan.deth.net',
   },
   bsc: {
-    scanDomain: 'api.bscscan.com',
     dethDomain: 'bscscan.deth.net',
   },
   avalanche: {
-    scanDomain: 'api.snowtrace.io',
     dethDomain: 'snowtrace.deth.net',
   },
   fantom: {
-    scanDomain: 'api.ftmscan.com',
     dethDomain: 'ftmscan.deth.net',
   },
   arbitrum: {
-    scanDomain: 'api.arbiscan.io',
     dethDomain: 'arbiscan.deth.net',
   },
   polygon: {
-    scanDomain: 'api.polygonscan.com',
     dethDomain: 'polygonscan.deth.net',
   },
   aurora: {
-    scanDomain: 'api.aurorascan.dev',
     dethDomain: '', // TODO
   },
   optimism: {
-    scanDomain: 'api-optimistic.etherscan.io',
     dethDomain: 'optimistic.etherscan.deth.net',
   },
   celo: {
-    scanDomain: 'explorer.celo.org',
     dethDomain: '', // TODO
   },
 }
@@ -121,7 +112,7 @@ const Answer = ({
   if (result.error) {
     return <p>{result.error.msg} ❌</p>
   }
-  const { scanDomain, dethDomain } = config[network]
+  const { dethDomain } = config[network]
   return (
     <div className="flex flex-row justify-around text-purple-600">
       <div className="my-auto">Start Block #{result.data.blockNumber}</div>
@@ -129,7 +120,7 @@ const Answer = ({
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>
           window.open(
-            `http://${scanDomain}/api?module=contract&action=getabi&address=${address}&format=raw`,
+            `/api/abi?network=${network}&address=${address}`,
             '_blank'
           )
         }
@@ -137,7 +128,10 @@ const Answer = ({
         View ABI
       </button>
       {dethDomain === '' ? (
-        <button disabled className="rounded-lg border-2 p-2 border-purple-300 text-gray-300">
+        <button
+          disabled
+          className="rounded-lg border-2 border-purple-300 p-2 text-gray-300"
+        >
           View Code (soon)
         </button>
       ) : (
@@ -215,7 +209,7 @@ const Home: NextPage = () => {
               miniscan
             </p>
             <p className="mt-5 text-xl">
-              Understand contracts {' '}
+              Understand contracts{' '}
               <span className="font-bold text-purple-600">easily</span>
             </p>
           </div>

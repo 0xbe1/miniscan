@@ -265,7 +265,7 @@ const Home: NextPage = () => {
           @0xbe1
         </a>
         &nbsp;
-        <a href="https://github.com/0xbe1/startblock">
+        <a href="https://github.com/0xbe1/miniscan">
           <img src="github.svg" alt="GitHub" className="h-6" />
         </a>
         &nbsp;|&nbsp;Questions?&nbsp;

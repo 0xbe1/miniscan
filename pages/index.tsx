@@ -5,7 +5,7 @@ import axios from 'axios'
 import Select from 'react-select'
 import Tweet from './tweet'
 
-export type Result = {
+export type StartblockResult = {
   data: {
     blockNumber: number
   }
@@ -61,7 +61,7 @@ const Answer = ({
   loading: boolean
   network: Network | null
   address: string
-  result: Result | null
+  result: StartblockResult | null
 }) => {
   if (!network && !address) {
     return <p>Try it 👆</p>
@@ -126,7 +126,7 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState<Network | null>(null)
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<Result | null>(null)
+  const [result, setResult] = useState<StartblockResult | null>(null)
 
   // derived states
   const isValidInput: boolean = network !== null && validateAddress(address)

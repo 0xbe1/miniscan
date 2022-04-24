@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Network, Result } from '..'
+import { Network, StartblockResult } from '..'
 import axios from 'axios'
 
 const API_TIMEOUT = 5000
@@ -69,7 +69,7 @@ export const config: Config = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<Result>
+  res: NextApiResponse<StartblockResult>
 ) {
   const address = req.query['address'] as string
   const network = req.query['network'] as Network

@@ -49,6 +49,10 @@ export const config: Config = {
     scanDomain: 'blockscout.com/xdai/mainnet',
     apiKey: '', // no api key needed
   },
+  hsc: {
+    scanDomain: 'api.hooscan.com',
+    apiKey: process.env.HOSCAN_API_KEY || '',
+  },
 }
 
 // Uncomment to debug

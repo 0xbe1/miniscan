@@ -153,7 +153,7 @@ const Home: NextPage = () => {
   }, [address, network])
 
   function handleAddressChange(event: React.FormEvent<HTMLInputElement>) {
-    setAddress(event.currentTarget.value)
+    setAddress(event.currentTarget.value.trim().toLowerCase())
   }
 
   return (

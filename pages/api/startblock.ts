@@ -45,6 +45,10 @@ export const config: Config = {
     scanDomain: 'explorer.celo.org',
     apiKey: '', // no api key needed
   },
+  gnosis: {
+    scanDomain: 'blockscout.com/xdai/mainnet',
+    apiKey: '', // no api key needed
+  },
 }
 
 // Uncomment to debug

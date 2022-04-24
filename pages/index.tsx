@@ -27,6 +27,7 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'celo', label: 'Celo' },
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'fantom', label: 'Fantom' },
+  { value: 'gnosis', label: 'Gnosis' },
   { value: 'optimism', label: 'Optimism' },
   { value: 'polygon', label: 'Polygon' },
 ]
@@ -39,6 +40,7 @@ export type Network =
   | 'celo'
   | 'ethereum'
   | 'fantom'
+  | 'gnosis'
   | 'optimism'
   | 'polygon'
 

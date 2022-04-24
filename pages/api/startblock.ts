@@ -51,7 +51,11 @@ export const config: Config = {
   },
   hsc: {
     scanDomain: 'api.hooscan.com',
-    apiKey: process.env.HOSCAN_API_KEY || '',
+    apiKey: process.env.HOOSCAN_API_KEY || '',
+  },
+  moonriver: {
+    scanDomain: 'api-moonriver.moonscan.io',
+    apiKey: process.env.MOONSCAN_API_KEY || '',
   },
 }
 

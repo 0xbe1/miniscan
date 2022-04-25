@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { Network } from '..'
 import axios from 'axios'
-import prettier from 'prettier'
 import { config } from './startblock'
 
 const API_TIMEOUT = 5000
@@ -30,7 +29,24 @@ export default async function handler(
       }
     )
     if (data.status === '1') {
-      res.status(200).json(data.result[0].SourceCode)
+      let sourceCode = data.result[0].SourceCode
+      // there are cases when source code is hidden deeper, see below
+      try {
+        const jsonStr = sourceCode.substring(1, sourceCode.length - 1)
+        const obj = JSON.parse(jsonStr)
+        sourceCode = Object.entries<{ content: string }>(obj.sources).reduce(
+          (prev, curr, i) =>
+            prev +
+            '\n' +
+            (i === 0
+              ? curr[1].content
+              : filterOutSolidityFileHeader(curr[1].content)),
+          ''
+        )
+      } catch (error: any) {
+        // ignore
+      }
+      res.status(200).send(sourceCode)
     } else {
       res.status(200).json({
         error: {
@@ -46,4 +62,12 @@ export default async function handler(
       },
     })
   }
+}
+
+function filterOutSolidityFileHeader(sourceCode: string) {
+  const lines = sourceCode.split('\n')
+  const filteredLines = lines.filter((line) => {
+    return !line.startsWith('pragma solidity') && !line.startsWith('import')
+  })
+  return filteredLines.join('\n')
 }

@@ -240,6 +240,10 @@ const Home: NextPage = () => {
         <a href="https://www.reddit.com/r/thegraph/comments/txi4c6/announcing_startblock_find_a_contracts_startblock/">
           <img src="reddit.svg" alt="Reddit" className="h-6" />
         </a>
+        &nbsp;|&nbsp;Powered by&nbsp;
+        <a href="https://etherscan.io/">
+          <img src="etherscan.svg" alt="Etherscan" className="h-6" />
+        </a>
       </footer>
     </div>
   )

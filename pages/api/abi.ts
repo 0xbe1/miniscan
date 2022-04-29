@@ -30,7 +30,17 @@ export default async function handler(
       }
     )
     if (data.status === '1') {
-      res.status(200).json(prettier.format(data.result))
+      let formatted = prettier.format(data.result, {
+        // so that `graph codegen` works
+        quoteProps: 'preserve',
+        trailingComma: 'none',
+        semi: false,
+      })
+      // remove heading semicolon because prettier always adds one
+      if (formatted[0] === ';') {
+        formatted = formatted.slice(1)
+      }
+      res.status(200).json(formatted)
     } else {
       res.status(200).json({
         error: {

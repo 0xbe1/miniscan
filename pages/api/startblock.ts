@@ -60,7 +60,7 @@ export const config: Config = {
   moonbeam: {
     scanDomain: 'api-moonbeam.moonscan.io',
     apiKey: process.env.MOONBEAM_MOONSCAN_API_KEY || '',
-  }
+  },
 }
 
 // Uncomment to debug

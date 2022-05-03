@@ -27,7 +27,7 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'celo', label: 'Celo' },
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'fantom', label: 'Fantom' },
-  { value: 'gnosis', label: 'Gnosis' },
+  { value: 'gnosis', label: 'Gnosis (API unreliable)' },
   { value: 'hsc', label: 'HSC' },
   { value: 'moonriver', label: 'Moonriver' },
   { value: 'optimism', label: 'Optimism' },

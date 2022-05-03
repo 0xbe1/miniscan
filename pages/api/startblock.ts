@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { Network, StartblockResult } from '..'
-import axios from 'axios'
-import { config } from './utils'
-
-const API_TIMEOUT = 5000
+import { Network, Result } from '..'
+import { getStartBlock } from './utils'
 
 // Uncomment to debug
 // axios.interceptors.request.use((request) => {
@@ -15,53 +12,10 @@ const API_TIMEOUT = 5000
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<StartblockResult>
+  res: NextApiResponse<Result<number>>
 ) {
   const address = req.query['address'] as string
   const network = req.query['network'] as Network
-  try {
-    const { data } = await axios.get(
-      `https://${config[network].scanDomain}/api`,
-      {
-        params: {
-          module: 'account',
-          action: 'txlist',
-          address,
-          startblock: 0,
-          endblock: 99999999,
-          page: 1,
-          offset: 1,
-          sort: 'asc',
-          apikey: config[network].apiKey,
-        },
-        timeout: API_TIMEOUT,
-      }
-    )
-    if (data.status === '1') {
-      res.status(200).json({
-        data: {
-          blockNumber: data.result[0].blockNumber,
-        },
-      })
-    } else {
-      res.status(200).json({
-        data: {
-          blockNumber: 0,
-        },
-        error: {
-          msg: data.message,
-        },
-      })
-    }
-  } catch (error: any) {
-    console.log(JSON.stringify(error, Object.getOwnPropertyNames(error)))
-    res.status(500).json({
-      data: {
-        blockNumber: 0,
-      },
-      error: {
-        msg: 'unknown error',
-      },
-    })
-  }
+  const getStartBlockResult = await getStartBlock(address, network)
+  res.status(200).json(getStartBlockResult)
 }

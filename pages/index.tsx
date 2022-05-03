@@ -5,14 +5,15 @@ import axios from 'axios'
 import Select from 'react-select'
 import Tweet from './tweet'
 
-export type StartblockResult = {
-  data: {
-    blockNumber: number
-  }
-  error?: {
-    msg: string
-  }
-}
+export type Result<T> =
+  | {
+      data: T
+      error?: never
+    }
+  | {
+      data?: never
+      error: { message: string }
+    }
 
 interface NetworkOption {
   readonly value: Network
@@ -63,7 +64,7 @@ const Answer = ({
   loading: boolean
   network: Network | null
   address: string
-  result: StartblockResult | null
+  result: Result<number> | null
 }) => {
   if (!network && !address) {
     return <p>Try it 👆</p>
@@ -84,11 +85,11 @@ const Answer = ({
     return <p>no data ❌</p>
   }
   if (result.error) {
-    return <p>{result.error.msg} ❌</p>
+    return <p>{result.error.message} ❌</p>
   }
   return (
     <div className="flex flex-row justify-around text-purple-600">
-      <div className="my-auto">Start Block #{result.data.blockNumber}</div>
+      <div className="my-auto">Start Block #{result.data}</div>
       <button
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>
@@ -128,7 +129,7 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState<Network | null>(null)
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<StartblockResult | null>(null)
+  const [result, setResult] = useState<Result<number> | null>(null)
 
   // derived states
   const isValidInput: boolean = network !== null && validateAddress(address)

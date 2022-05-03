@@ -93,7 +93,7 @@ const Answer = ({
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>
           window.open(
-            `/api/abi?network=${network}&address=${address}`,
+            `/api/code?network=${network}&address=${address}&codeType=ABI`,
             '_blank'
           )
         }
@@ -105,7 +105,7 @@ const Answer = ({
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>
           window.open(
-            `/api/sourcecode?network=${network}&address=${address}`,
+            `/api/code?network=${network}&address=${address}&codeType=SourceCode`,
             '_blank'
           )
         }

@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import { Network } from '..'
 import axios from 'axios'
 import prettier from 'prettier'
-import { config } from './startblock'
+import { config } from './utils'
 
 const API_TIMEOUT = 5000
 

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import prettier from 'prettier'
 import { Network } from '..'
 import { CodeType, getCode } from './utils'
 
@@ -14,6 +15,24 @@ export default async function handler(
   if (getCodeResult.error) {
     res.status(200).send(getCodeResult.error)
   } else {
-    res.status(200).send(getCodeResult.data)
+    let code = getCodeResult.data.Code
+    if (codeType === 'ABI') {
+      code = formatABI(code)
+    }
+    res.status(200).send(code)
   }
+}
+
+function formatABI(abi: string): string {
+  let formatted = prettier.format(abi, {
+    // so that `graph codegen` works
+    quoteProps: 'preserve',
+    trailingComma: 'none',
+    semi: false,
+  })
+  // remove heading semicolon because prettier always adds one
+  if (formatted[0] === ';') {
+    formatted = formatted.slice(1)
+  }
+  return formatted
 }

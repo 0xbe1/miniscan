@@ -1,8 +1,5 @@
 import axios from 'axios'
-import prettier from 'prettier'
 import { Network, Result } from '..'
-
-const API_TIMEOUT = 5000
 
 type Config = {
   [key in Network]: { scanDomain: string; apiKey: string }
@@ -10,13 +7,26 @@ type Config = {
 
 export type CodeType = 'ABI' | 'SourceCode'
 
-type GetSourceCodeResult = {
+type GetSourceCodeData = {
   ABI: string
   ContractName: string
   Implementation: string
   Proxy: string
   SourceCode: string
 }
+
+export type GetContractData = {
+  ContractName: string
+  StartBlock: number
+  ABI: string
+}
+
+type GetCodeData = {
+  ContractName: string
+  Code: string
+}
+
+const API_TIMEOUT = 5000
 
 export const config: Config = {
   ethereum: {
@@ -118,7 +128,7 @@ export async function getCode(
   address: string,
   network: Network,
   codeType: CodeType
-): Promise<Result<string>> {
+): Promise<Result<GetCodeData>> {
   try {
     const { data } = await axios.get(
       `https://${config[network].scanDomain}/api`,
@@ -139,14 +149,24 @@ export async function getCode(
         },
       }
     }
-    let result = data.result[0] as GetSourceCodeResult
+    let result = data.result[0] as GetSourceCodeData
 
     // it is the implementation
     if (result.Proxy === '0') {
       if (codeType === 'ABI') {
-        return { data: formatABI(result.ABI) }
+        return {
+          data: {
+            ContractName: result.ContractName,
+            Code: result.ABI,
+          },
+        }
       }
-      return { data: parseSourceCode(result.SourceCode) }
+      return {
+        data: {
+          ContractName: result.ContractName,
+          Code: parseSourceCode(result.SourceCode),
+        },
+      }
     }
 
     // it is the proxy, go to implementation
@@ -158,6 +178,36 @@ export async function getCode(
         message: 'unknown error',
       },
     }
+  }
+}
+
+// Added for cryptofees community
+export async function getContract(
+  address: string,
+  network: Network
+): Promise<Result<GetContractData>> {
+  const getStartBlockResult = await getStartBlock(address, network)
+  if (getStartBlockResult.error) {
+    return {
+      error: {
+        message: getStartBlockResult.error.message,
+      },
+    }
+  }
+  const getABIResult = await getCode(address, network, 'ABI')
+  if (getABIResult.error) {
+    return {
+      error: {
+        message: getABIResult.error.message,
+      },
+    }
+  }
+  return {
+    data: {
+      ContractName: getABIResult.data.ContractName,
+      StartBlock: getStartBlockResult.data,
+      ABI: getABIResult.data.Code,
+    },
   }
 }
 
@@ -186,18 +236,4 @@ function filterOutSolidityFileHeader(sourceCode: string): string {
     return !line.startsWith('pragma solidity') && !line.startsWith('import')
   })
   return filteredLines.join('\n')
-}
-
-function formatABI(abi: string): string {
-  let formatted = prettier.format(abi, {
-    // so that `graph codegen` works
-    quoteProps: 'preserve',
-    trailingComma: 'none',
-    semi: false,
-  })
-  // remove heading semicolon because prettier always adds one
-  if (formatted[0] === ';') {
-    formatted = formatted.slice(1)
-  }
-  return formatted
 }

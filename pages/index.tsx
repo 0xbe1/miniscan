@@ -222,27 +222,35 @@ const Home: NextPage = () => {
         </div>
       </main>
 
-      <footer className="flex h-16 w-full items-center justify-center border-t">
-        By&nbsp;
-        <a className="text-purple-600" href="https://github.com/0xbe1">
-          0xbe1
-        </a>
-        &nbsp;|&nbsp;
-        <a href="https://github.com/0xbe1/miniscan">
-          <img src="github.svg" alt="GitHub" className="h-6" />
-        </a>
-        &nbsp;
-        <a href="https://discord.gg/u5KUjNZ8wy">
-          <img src="discord.svg" alt="Discord" className="h-6" />
-        </a>
-        &nbsp;
-        <a href="https://twitter.com/_0xbe1">
-          <img src="twitter.svg" alt="Twitter" className="h-6" />
-        </a>
-        &nbsp;|&nbsp;Powered by&nbsp;
-        <a href="https://etherscan.io/">
-          <img src="etherscan.svg" alt="Etherscan" className="h-6" />
-        </a>
+      <footer className="flex h-20 w-full flex-col items-center justify-center border-t">
+        <div>
+          by{' '}
+          <a className="underline" href="https://twitter.com/_0xbe1">
+            0xbe1
+          </a>{' '}
+          |{' '}
+          <a className="underline" href="https://github.com/0xbe1/miniscan">
+            Code
+          </a>{' '}
+          <a className="underline" href="https://discord.gg/u5KUjNZ8wy">
+            Community
+          </a>{' '}
+          | Powered by Etherscan
+        </div>
+        <div>
+          *{' '}
+          <a className="underline" href="https://miniscan.xyz">
+            miniscan.xyz
+          </a>{' '}
+          |{' '}
+          <a className="underline" href="https://theybuidl.xyz">
+            theybuidl.xyz
+          </a>{' '}
+          |{' '}
+          <a className="underline" href="https://name3.org">
+            name3.org
+          </a>
+        </div>
       </footer>
     </div>
   )

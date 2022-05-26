@@ -225,23 +225,19 @@ const Home: NextPage = () => {
       <footer className="flex h-16 w-full items-center justify-center border-t">
         By&nbsp;
         <a className="text-purple-600" href="https://github.com/0xbe1">
-          @0xbe1
+          0xbe1
         </a>
-        &nbsp;
+        &nbsp;|&nbsp;
         <a href="https://github.com/0xbe1/miniscan">
           <img src="github.svg" alt="GitHub" className="h-6" />
         </a>
-        &nbsp;|&nbsp;Questions?&nbsp;
+        &nbsp;
         <a href="https://discord.gg/u5KUjNZ8wy">
           <img src="discord.svg" alt="Discord" className="h-6" />
         </a>
         &nbsp;
         <a href="https://twitter.com/_0xbe1/status/1511638106554134530">
           <img src="twitter.svg" alt="Twitter" className="h-6" />
-        </a>
-        &nbsp;
-        <a href="https://www.reddit.com/r/thegraph/comments/txi4c6/announcing_startblock_find_a_contracts_startblock/">
-          <img src="reddit.svg" alt="Reddit" className="h-6" />
         </a>
         &nbsp;|&nbsp;Powered by&nbsp;
         <a href="https://etherscan.io/">

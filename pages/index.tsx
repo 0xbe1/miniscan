@@ -236,7 +236,7 @@ const Home: NextPage = () => {
           <img src="discord.svg" alt="Discord" className="h-6" />
         </a>
         &nbsp;
-        <a href="https://twitter.com/_0xbe1/status/1511638106554134530">
+        <a href="https://twitter.com/_0xbe1">
           <img src="twitter.svg" alt="Twitter" className="h-6" />
         </a>
         &nbsp;|&nbsp;Powered by&nbsp;

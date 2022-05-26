@@ -26,6 +26,8 @@ type GetCodeData = {
   Code: string
 }
 
+type getStartBlockAction = 'txlist' | 'txlistinternal'
+
 const API_TIMEOUT = 5000
 
 export const config: Config = {
@@ -87,13 +89,28 @@ export async function getStartBlock(
   address: string,
   network: Network
 ): Promise<Result<number>> {
+  let getStartBlockResult = await _getStartBlock(address, network, 'txlist')
+  if (
+    getStartBlockResult.error &&
+    getStartBlockResult.error.message === 'No transactions found'
+  ) {
+    return _getStartBlock(address, network, 'txlistinternal')
+  }
+  return getStartBlockResult
+}
+
+async function _getStartBlock(
+  address: string,
+  network: Network,
+  action: getStartBlockAction
+): Promise<Result<number>> {
   try {
     const { data } = await axios.get(
       `https://${config[network].scanDomain}/api`,
       {
         params: {
           module: 'account',
-          action: 'txlist',
+          action,
           address,
           startblock: 0,
           endblock: 99999999,

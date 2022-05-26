@@ -236,8 +236,7 @@ const Home: NextPage = () => {
           | Powered by Etherscan
         </div>
         <div>
-          *{' '}
-          <a className="underline" href="https://miniscan.xyz">
+          <a className="text-purple-600 underline" href="https://miniscan.xyz">
             miniscan.xyz
           </a>{' '}
           |{' '}

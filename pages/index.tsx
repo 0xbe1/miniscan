@@ -174,9 +174,7 @@ const Home: NextPage = () => {
       <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-1/2">
         <div className="w-full">
           <div className=" text-center">
-            <p className="bg-gradient-to-tr from-purple-600 to-blue-600 bg-clip-text text-6xl font-bold text-transparent">
-              miniscan
-            </p>
+            <p className="text-6xl font-bold text-purple-600">miniscan</p>
             <p className="mt-5 text-xl">
               Understand contracts{' '}
               <span className="font-bold text-purple-600">easily</span>

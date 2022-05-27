@@ -175,9 +175,20 @@ const Home: NextPage = () => {
         <div className="w-full">
           <div className=" text-center">
             <p className="text-6xl font-bold text-purple-600">miniscan</p>
-            <p className="mt-5 text-xl">
-              Understand contracts{' '}
-              <span className="font-bold text-purple-600">easily</span>
+            <p className="mt-5 text-xl">Contract deep dive without pain</p>
+            <p className="text-md mt-2 text-purple-600">
+              Trusted by devs @{' '}
+              <a className="underline" href="https://messari.io/">
+                Messari
+              </a>{' '}
+              |{' '}
+              <a className="underline" href="https://thegraph.com/">
+                The Graph
+              </a>{' '}
+              |{' '}
+              <a className="underline" href="https://simplefi.finance/">
+                SimpleFi
+              </a>
             </p>
           </div>
           <Select

@@ -169,7 +169,8 @@ export async function getCode(
     let result = data.result[0] as GetSourceCodeData
 
     // it is the implementation
-    if (result.Proxy === '0') {
+    // or even if it claims to be a proxy, but the implementation address eq proxy address, such as Ethereum 0xc36442b4a4522e871399cd717abdd847ab11fe88 (Uniswap V3 Position NFT)
+    if (result.Proxy === '0' || result.Implementation === address) {
       if (codeType === 'ABI') {
         return {
           data: {

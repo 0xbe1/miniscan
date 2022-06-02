@@ -255,6 +255,10 @@ const Home: NextPage = () => {
             theybuidl.xyz
           </a>{' '}
           |{' '}
+          <a className="underline" href="https://okgraph.xyz">
+            okgraph.xyz
+          </a>{' '}
+          |{' '}
           <a className="underline" href="https://name3.org">
             name3.org
           </a>

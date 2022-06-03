@@ -26,6 +26,7 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'avalanche', label: 'Avalanche' },
   { value: 'bsc', label: 'BSC' },
   { value: 'celo', label: 'Celo' },
+  { value: 'cronos', label: 'Cronos' },
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'fantom', label: 'Fantom' },
   { value: 'gnosis', label: 'Gnosis (API unreliable)' },
@@ -42,6 +43,7 @@ export type Network =
   | 'avalanche'
   | 'bsc'
   | 'celo'
+  | 'cronos'
   | 'ethereum'
   | 'fantom'
   | 'gnosis'

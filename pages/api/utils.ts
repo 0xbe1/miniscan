@@ -83,6 +83,10 @@ export const config: Config = {
     scanDomain: 'api-moonbeam.moonscan.io',
     apiKey: process.env.MOONBEAM_MOONSCAN_API_KEY || '',
   },
+  cronos: {
+    scanDomain: 'api.cronoscan.com',
+    apiKey: process.env.CRONOSCAN_API_KEY || '',
+  },
 }
 
 export async function getStartBlock(

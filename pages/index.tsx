@@ -228,7 +228,7 @@ const Home: NextPage = () => {
             username="dabit3"
             tweetUrl="https://twitter.com/dabit3/status/1512089488847257600"
             authorUrl="https://twitter.com/dabit3"
-            profileImageUrl="https://pbs.twimg.com/profile_images/1496581535914414082/LB6_2C6f_400x400.jpg"
+            profileImageUrl="https://pbs.twimg.com/profile_images/1527428692103860224/sqHT4Wl1_400x400.png"
           />
         </div>
       </main>

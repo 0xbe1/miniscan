@@ -3,7 +3,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
-import Tweet from './tweet'
+import Tweet from '../components/tweet'
 
 export type Result<T> =
   | {

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
 import Tweet from '../components/tweet'
+import { GetContractData } from './api/utils'
 
 export type Result<T> =
   | {
@@ -66,7 +67,7 @@ const Answer = ({
   loading: boolean
   network: Network | null
   address: string
-  result: Result<number> | null
+  result: Result<GetContractData> | null
 }) => {
   if (!network && !address) {
     return <p>Try it 👆</p>
@@ -91,7 +92,7 @@ const Answer = ({
   }
   return (
     <div className="flex flex-row justify-around text-purple-600">
-      <div className="my-auto">Start Block #{result.data}</div>
+      <div className="my-auto">Start Block #{result.data.StartBlock}</div>
       <button
         className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
         onClick={() =>
@@ -131,7 +132,7 @@ const Home: NextPage = () => {
   const [network, setNetwork] = useState<Network | null>(null)
   const [address, setAddress] = useState('')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState<Result<number> | null>(null)
+  const [result, setResult] = useState<Result<GetContractData> | null>(null)
 
   // derived states
   const isValidInput: boolean = network !== null && validateAddress(address)
@@ -140,7 +141,7 @@ const Home: NextPage = () => {
     async function fetchData() {
       setLoading(true)
       try {
-        const { data } = await axios.get('api/startblock', {
+        const { data } = await axios.get('api/contract', {
           params: {
             network,
             address,

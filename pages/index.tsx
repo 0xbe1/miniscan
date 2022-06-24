@@ -91,31 +91,31 @@ const Answer = ({
     return <p>{result.error.message} ❌</p>
   }
   return (
-    <div className="flex flex-row justify-around text-purple-600">
-      <div className="my-auto">Start Block #{result.data.StartBlock}</div>
-      <button
-        className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
-        onClick={() =>
-          window.open(
-            `/api/code?network=${network}&address=${address}&codeType=ABI`,
-            '_blank'
-          )
-        }
-      >
-        View ABI
-      </button>
-
-      <button
-        className="rounded-lg border-2 border-purple-300 p-2 hover:border-transparent hover:bg-purple-600 hover:text-white"
-        onClick={() =>
-          window.open(
-            `/api/code?network=${network}&address=${address}&codeType=SourceCode`,
-            '_blank'
-          )
-        }
-      >
-        View Code
-      </button>
+    <div className="grid grid-cols-3">
+      <div>
+        <div className="text-purple-600">Start Block</div>
+        <div>{result.data.StartBlock}</div>
+      </div>
+      <div>
+        <div className="text-purple-600">ABI</div>
+        <div>
+          <a
+            href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
+          >
+            🔗
+          </a>
+        </div>
+      </div>
+      <div>
+        <div className="text-purple-600">Code</div>
+        <div>
+          <a
+            href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
+          >
+            🔗
+          </a>
+        </div>
+      </div>
     </div>
   )
 }
@@ -216,7 +216,7 @@ const Home: NextPage = () => {
             onChange={handleAddressChange}
             ref={inputElement}
           />
-          <div className="my-4 text-center text-xl">
+          <div className="text-md my-4 text-center">
             <Answer
               loading={loading}
               network={network}

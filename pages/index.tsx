@@ -129,7 +129,11 @@ const Answer = ({
   const abi: AbiEntry[] = JSON.parse(result.data.ABI)
   return (
     <div>
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-5">
+        <div>
+          <div className="text-purple-600">Name</div>
+          <div>{result.data.ContractName}</div>
+        </div>
         <div>
           <div className="text-purple-600">Start Block</div>
           <div>{result.data.StartBlock}</div>

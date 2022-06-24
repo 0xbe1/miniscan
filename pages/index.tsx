@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
 import Tweet from '../components/tweet'
-import { GetContractData } from './api/utils'
+import { config, GetContractData } from './api/utils'
 
 export type Result<T> =
   | {
@@ -91,7 +91,7 @@ const Answer = ({
     return <p>{result.error.message} ❌</p>
   }
   return (
-    <div className="grid grid-cols-3">
+    <div className="grid grid-cols-4">
       <div>
         <div className="text-purple-600">Start Block</div>
         <div>{result.data.StartBlock}</div>
@@ -112,6 +112,14 @@ const Answer = ({
           <a
             href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
           >
+            🔗
+          </a>
+        </div>
+      </div>
+      <div>
+        <div className="text-purple-600">Explorer</div>
+        <div>
+          <a href={`https://${config[network].scanDomain}/address/${address}`}>
             🔗
           </a>
         </div>

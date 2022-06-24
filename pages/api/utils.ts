@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Network, Result } from '..'
 
 type Config = {
-  [key in Network]: { scanDomain: string; apiKey: string }
+  [key in Network]: { scanDomain: string; apiDomain: string; apiKey: string }
 }
 
 export type CodeType = 'ABI' | 'SourceCode'
@@ -32,59 +32,73 @@ const API_TIMEOUT = 5000
 
 export const config: Config = {
   ethereum: {
-    scanDomain: 'api.etherscan.io',
+    scanDomain: 'etherscan.io',
+    apiDomain: 'api.etherscan.io',
     apiKey: process.env.ETHERSCAN_API_KEY || '',
   },
   bsc: {
-    scanDomain: 'api.bscscan.com',
+    scanDomain: 'bscscan.com',
+    apiDomain: 'api.bscscan.com',
     apiKey: process.env.BSCSCAN_API_KEY || '',
   },
   avalanche: {
-    scanDomain: 'api.snowtrace.io',
+    scanDomain: 'snowtrace.io',
+    apiDomain: 'api.snowtrace.io',
     apiKey: process.env.SNOWTRACE_API_KEY || '',
   },
   fantom: {
-    scanDomain: 'api.ftmscan.com',
+    scanDomain: 'ftmscan.com',
+    apiDomain: 'api.ftmscan.com',
     apiKey: process.env.FTMSCAN_API_KEY || '',
   },
   arbitrum: {
-    scanDomain: 'api.arbiscan.io',
+    scanDomain: 'arbiscan.io',
+    apiDomain: 'api.arbiscan.io',
     apiKey: process.env.ARBISCAN_API_KEY || '',
   },
   polygon: {
-    scanDomain: 'api.polygonscan.com',
+    scanDomain: 'polygonscan.com',
+    apiDomain: 'api.polygonscan.com',
     apiKey: process.env.POLYGONSCAN_API_KEY || '',
   },
   aurora: {
-    scanDomain: 'api.aurorascan.dev',
+    scanDomain: 'aurorascan.dev',
+    apiDomain: 'api.aurorascan.dev',
     apiKey: process.env.AURORASCAN_API_KEY || '',
   },
   optimism: {
-    scanDomain: 'api-optimistic.etherscan.io',
+    scanDomain: 'optimistic.etherscan.io',
+    apiDomain: 'api-optimistic.etherscan.io',
     apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || '',
   },
   celo: {
-    scanDomain: 'api.celoscan.xyz',
+    scanDomain: 'celoscan.xyz',
+    apiDomain: 'api.celoscan.xyz',
     apiKey: process.env.CELOSCAN_API_KEY || '',
   },
   gnosis: {
     scanDomain: 'blockscout.com/xdai/mainnet',
+    apiDomain: 'blockscout.com/xdai/mainnet',
     apiKey: '', // no api key needed
   },
   hsc: {
-    scanDomain: 'api.hooscan.com',
+    scanDomain: 'hooscan.com',
+    apiDomain: 'api.hooscan.com',
     apiKey: process.env.HOOSCAN_API_KEY || '',
   },
   moonriver: {
-    scanDomain: 'api-moonriver.moonscan.io',
+    scanDomain: 'moonriver.moonscan.io',
+    apiDomain: 'api-moonriver.moonscan.io',
     apiKey: process.env.MOONRIVIER_MOONSCAN_API_KEY || '',
   },
   moonbeam: {
-    scanDomain: 'api-moonbeam.moonscan.io',
+    scanDomain: 'moonbeam.moonscan.io',
+    apiDomain: 'api-moonbeam.moonscan.io',
     apiKey: process.env.MOONBEAM_MOONSCAN_API_KEY || '',
   },
   cronos: {
-    scanDomain: 'api.cronoscan.com',
+    scanDomain: 'cronoscan.com',
+    apiDomain: 'api.cronoscan.com',
     apiKey: process.env.CRONOSCAN_API_KEY || '',
   },
 }
@@ -110,7 +124,7 @@ async function _getStartBlock(
 ): Promise<Result<number>> {
   try {
     const { data } = await axios.get(
-      `https://${config[network].scanDomain}/api`,
+      `https://${config[network].apiDomain}/api`,
       {
         params: {
           module: 'account',
@@ -152,7 +166,7 @@ export async function getCode(
 ): Promise<Result<GetCodeData>> {
   try {
     const { data } = await axios.get(
-      `https://${config[network].scanDomain}/api`,
+      `https://${config[network].apiDomain}/api`,
       {
         params: {
           module: 'contract',

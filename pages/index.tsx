@@ -3,6 +3,7 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
+import web3 from 'web3'
 import Tweet from '../components/tweet'
 import { config, GetContractData } from './api/utils'
 
@@ -19,6 +20,17 @@ export type Result<T> =
 interface NetworkOption {
   readonly value: Network
   readonly label: string
+}
+
+interface AbiEntry {
+  name: string
+  type: string
+  inputs: Array<{
+    indexed: boolean
+    internalType: string
+    name: string
+    type: string
+  }>
 }
 
 const networkOptions: readonly NetworkOption[] = [
@@ -58,6 +70,30 @@ function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
+const AbiEvent = ({
+  entry,
+  network,
+  address,
+}: {
+  entry: AbiEntry
+  network: Network
+  address: string
+}) => {
+  const { name, inputs } = entry
+  const typeSig = `${name}(${inputs.map((i) => i.type).join(',')})`
+  return (
+    <p className="truncate hover:underline">
+      <a
+        href={`https://${
+          config[network].scanDomain
+        }/txs?ea=${address}&topic0=${web3.utils.soliditySha3(typeSig)}`}
+      >
+        {name}
+      </a>
+    </p>
+  )
+}
+
 const Answer = ({
   loading,
   network,
@@ -90,39 +126,52 @@ const Answer = ({
   if (result.error) {
     return <p>{result.error.message} ❌</p>
   }
+  const abi: AbiEntry[] = JSON.parse(result.data.ABI)
   return (
-    <div className="grid grid-cols-4">
-      <div>
-        <div className="text-purple-600">Start Block</div>
-        <div>{result.data.StartBlock}</div>
-      </div>
-      <div>
-        <div className="text-purple-600">ABI</div>
+    <div>
+      <div className="grid grid-cols-4">
         <div>
-          <a
-            href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
-          >
-            🔗
-          </a>
+          <div className="text-purple-600">Start Block</div>
+          <div>{result.data.StartBlock}</div>
+        </div>
+        <div>
+          <div className="text-purple-600">ABI</div>
+          <div>
+            <a
+              href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
+            >
+              🔗
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="text-purple-600">Code</div>
+          <div>
+            <a
+              href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
+            >
+              🔗
+            </a>
+          </div>
+        </div>
+        <div>
+          <div className="text-purple-600">Explorer</div>
+          <div>
+            <a
+              href={`https://${config[network].scanDomain}/address/${address}`}
+            >
+              🔗
+            </a>
+          </div>
         </div>
       </div>
-      <div>
-        <div className="text-purple-600">Code</div>
-        <div>
-          <a
-            href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
-          >
-            🔗
-          </a>
-        </div>
-      </div>
-      <div>
-        <div className="text-purple-600">Explorer</div>
-        <div>
-          <a href={`https://${config[network].scanDomain}/address/${address}`}>
-            🔗
-          </a>
-        </div>
+      <p className="mt-2 text-purple-600">Events (click to view txs)</p>
+      <div className="grid grid-cols-3 gap-1">
+        {abi
+          .filter((e) => e.type === 'event')
+          .map((e, i) => (
+            <AbiEvent key={i} entry={e} network={network} address={address} />
+          ))}
       </div>
     </div>
   )
@@ -186,7 +235,7 @@ const Home: NextPage = () => {
         <div className="w-full">
           <div className=" text-center">
             <p className="text-6xl font-bold text-purple-600">miniscan</p>
-            <p className="mt-5 text-xl">Contract deep dive without pain</p>
+            <p className="mt-5 text-xl">Contract deep dive like a pro</p>
             <p className="text-md mt-2 text-purple-600">
               Trusted by devs @{' '}
               <a className="underline" href="https://messari.io/">

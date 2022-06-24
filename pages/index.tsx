@@ -170,7 +170,7 @@ const Answer = ({
         </div>
       </div>
       <p className="mt-2 text-purple-600">Events (click to view txs)</p>
-      <div className="grid grid-cols-3 gap-1">
+      <div className="grid grid-cols-3 gap-1 text-left">
         {abi
           .filter((e) => e.type === 'event')
           .map((e, i) => (
@@ -238,9 +238,9 @@ const Home: NextPage = () => {
       <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-1/2">
         <div className="w-full">
           <div className=" text-center">
-            <p className="text-6xl font-bold text-purple-600">miniscan</p>
-            <p className="mt-5 text-xl">Contract deep dive like a pro</p>
-            <p className="text-md mt-2 text-purple-600">
+            <p className="my-5 text-6xl font-bold text-purple-600">miniscan</p>
+            <p className="my-2 text-xl">Contract deep dive like a pro</p>
+            <p className="text-md text-purple-600">
               Trusted by devs @{' '}
               <a className="underline" href="https://messari.io/">
                 Messari

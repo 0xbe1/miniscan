@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
 import web3 from 'web3'
+import { useQueryState } from 'next-usequerystate'
 import Tweet from '../components/tweet'
 import { config, GetContractData } from './api/utils'
 
@@ -190,31 +191,29 @@ const Home: NextPage = () => {
     }
   }, [])
 
-  const [network, setNetwork] = useState<Network | null>(null)
-  const [address, setAddress] = useState('')
+  const [network, setNetwork] = useQueryState('network')
+  const [address, setAddress] = useQueryState('address')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<Result<GetContractData> | null>(null)
 
-  // derived states
-  const isValidInput: boolean = network !== null && validateAddress(address)
+  async function fetchData() {
+    setLoading(true)
+    try {
+      const { data } = await axios.get('api/contract', {
+        params: {
+          network,
+          address,
+        },
+      })
+      setResult(data)
+    } catch (error: any) {
+      setResult(null)
+    }
+    setLoading(false)
+  }
 
   useEffect(() => {
-    async function fetchData() {
-      setLoading(true)
-      try {
-        const { data } = await axios.get('api/contract', {
-          params: {
-            network,
-            address,
-          },
-        })
-        setResult(data)
-      } catch (error: any) {
-        setResult(null)
-      }
-      setLoading(false)
-    }
-    if (isValidInput) {
+    if (network && address && validateAddress(address)) {
       fetchData()
     }
   }, [address, network])
@@ -260,6 +259,7 @@ const Home: NextPage = () => {
             className="basic-single my-5 text-center"
             classNamePrefix="select"
             name="networks"
+            value={networkOptions.find((o) => o.value === network)}
             options={networkOptions}
             onChange={(selected) => {
               if (selected) {
@@ -273,15 +273,15 @@ const Home: NextPage = () => {
             placeholder="contract address"
             aria-label="Search"
             aria-describedby="button-addon2"
-            value={address}
+            value={address || ''}
             onChange={handleAddressChange}
             ref={inputElement}
           />
           <div className="text-md my-4 text-center">
             <Answer
               loading={loading}
-              network={network}
-              address={address}
+              network={network as Network}
+              address={address || ''}
               result={result}
             />
           </div>

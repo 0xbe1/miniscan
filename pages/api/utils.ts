@@ -238,6 +238,13 @@ export async function getContract(
       },
     }
   }
+  if (getABIResult.data.Code === 'Contract source code not verified') {
+    return {
+      error: {
+        message: 'Not a verified contract address',
+      },
+    }
+  }
   return {
     data: {
       ContractName: getABIResult.data.ContractName,

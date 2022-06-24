@@ -107,70 +107,97 @@ const Answer = ({
   result: Result<GetContractData> | null
 }) => {
   if (!network && !address) {
-    return <p>Try it 👆</p>
+    return <p className="text-center">👆 Try it</p>
   }
   if (network === null) {
-    return <p>Choose a network 🤔</p>
+    return <p className="text-center">🤔 Choose a network</p>
   }
   if (address === '') {
-    return <p>Paste an address 🤔</p>
+    return <p className="text-center">🤔 Paste an address</p>
   }
   if (!validateAddress(address)) {
-    return <p>Invalid address 🤔</p>
+    return <p className="text-center">🤔 Invalid address</p>
   }
   if (loading) {
-    return <p>loading... ⏳</p>
+    return <p className="text-center">⏳ loading...</p>
   }
   if (!result) {
-    return <p>no data ❌</p>
+    return <p className="text-center">❌ no data</p>
   }
   if (result.error) {
-    return <p>{result.error.message} ❌</p>
+    return <p className="text-center">❌ {result.error.message}</p>
   }
   const abi: AbiEntry[] = JSON.parse(result.data.ABI)
   return (
     <div>
-      <div className="grid grid-cols-5">
+      <div className="grid grid-cols-3">
         <div>
-          <div className="text-purple-600">Name</div>
-          <div>{result.data.ContractName}</div>
+          <p className="text-purple-600">Name</p>
+          <p>{result.data.ContractName}</p>
         </div>
         <div>
-          <div className="text-purple-600">Start Block</div>
-          <div>{result.data.StartBlock}</div>
+          <p className="text-purple-600">Start Block</p>
+          <p>{result.data.StartBlock}</p>
         </div>
         <div>
-          <div className="text-purple-600">ABI</div>
+          <p className="text-purple-600">Links</p>
           <div>
             <a
+              className="hover:underline"
               href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
             >
-              🔗
+              ABI
             </a>
-          </div>
-        </div>
-        <div>
-          <div className="text-purple-600">Code</div>
-          <div>
+            {' | '}
             <a
+              className="hover:underline"
               href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
             >
-              🔗
+              Code
             </a>
-          </div>
-        </div>
-        <div>
-          <div className="text-purple-600">Explorer</div>
-          <div>
+            {' | '}
             <a
+              className="hover:underline"
               href={`https://${config[network].scanDomain}/address/${address}`}
             >
-              🔗
+              Explorer
             </a>
           </div>
+          {/* <div>
+            <span>
+              <a
+                href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
+              >
+                🔗{" "}
+              </a>
+            </span>
+            <span>ABI</span>
+          </div> */}
+
+          {/* <div>
+            <span>
+              <a
+                href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
+              >
+                🔗{" "}
+              </a>
+            </span>
+            <span>Code</span>
+          </div>
+
+          <div>
+            <span>
+              <a
+                href={`https://${config[network].scanDomain}/address/${address}`}
+              >
+                🔗{" "}
+              </a>
+            </span>
+            <span>Explorer</span>
+          </div> */}
         </div>
       </div>
-      <p className="mt-2 text-purple-600">Events (click to view txs)</p>
+      <p className="mt-5 text-purple-600">Events (click to view txs)</p>
       <div className="grid grid-cols-3 gap-1 text-left">
         {abi
           .filter((e) => e.type === 'event')
@@ -277,7 +304,7 @@ const Home: NextPage = () => {
             onChange={handleAddressChange}
             ref={inputElement}
           />
-          <div className="text-md my-4 text-center">
+          <div className="text-md my-4">
             <Answer
               loading={loading}
               network={network as Network}

@@ -163,38 +163,6 @@ const Answer = ({
               Explorer
             </a>
           </div>
-          {/* <div>
-            <span>
-              <a
-                href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
-              >
-                🔗{" "}
-              </a>
-            </span>
-            <span>ABI</span>
-          </div> */}
-
-          {/* <div>
-            <span>
-              <a
-                href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
-              >
-                🔗{" "}
-              </a>
-            </span>
-            <span>Code</span>
-          </div>
-
-          <div>
-            <span>
-              <a
-                href={`https://${config[network].scanDomain}/address/${address}`}
-              >
-                🔗{" "}
-              </a>
-            </span>
-            <span>Explorer</span>
-          </div> */}
         </div>
       </div>
       <p className="mt-5 text-purple-600">Events (click to view txs)</p>

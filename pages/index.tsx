@@ -1,12 +1,14 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
 import web3 from 'web3'
 import { useQueryState } from 'next-usequerystate'
 import Tweet from '../components/tweet'
 import { config, GetContractData } from './api/utils'
+import { useLocalStorage } from '../utils/useLocalStorage'
+import Link from 'next/link'
 
 export type Result<T> =
   | {
@@ -95,6 +97,12 @@ const AbiEvent = ({
   )
 }
 
+type SavedContract = {
+  contractName: string
+  contractAddress: string
+  network: Network | null
+}
+
 const Answer = ({
   loading,
   network,
@@ -165,6 +173,7 @@ const Answer = ({
           </div>
         </div>
       </div>
+
       <p className="mt-5 text-purple-600">Events (click to view txs)</p>
       <div className="grid grid-cols-3 gap-1 text-left">
         {abi
@@ -186,10 +195,35 @@ const Home: NextPage = () => {
     }
   }, [])
 
+  const [contracts, setContracts] =
+    useLocalStorage<Array<SavedContract>>('contracts')
   const [network, setNetwork] = useQueryState('network')
   const [address, setAddress] = useQueryState('address')
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<Result<GetContractData> | null>(null)
+
+  const isContractSaved =
+    contracts &&
+    contracts.find((c) => c.contractName === result?.data?.ContractName)
+
+  const toggleContractSave = useCallback(() => {
+    if (!result?.data) return
+
+    if (isContractSaved) {
+      setContracts(
+        contracts.filter((c) => c.contractName !== result.data.ContractName)
+      )
+    } else {
+      setContracts([
+        ...(contracts ?? []),
+        {
+          contractName: result.data.ContractName,
+          contractAddress: address,
+          network,
+        } as SavedContract,
+      ])
+    }
+  }, [isContractSaved, contracts, result])
 
   async function fetchData() {
     setLoading(true)
@@ -249,6 +283,27 @@ const Home: NextPage = () => {
               </a>
             </p>
           </div>
+          <div className="flex pt-3">
+            <div className="pr-2">Saved: </div>
+            {contracts?.map((c, i) => (
+              <>
+                <Link
+                  key={`${c.network}:${c.contractAddress}`}
+                  href={{
+                    pathname: '/',
+                    query: { network: c.network, address: c.contractAddress },
+                  }}
+                >
+                  <button className="text-purple-600 underline">
+                    {c.contractName}
+                  </button>
+                </Link>
+                {i < contracts.length - 1 && (
+                  <span className="px-1 text-purple-600">|</span>
+                )}
+              </>
+            ))}
+          </div>
           <Select
             placeholder={'Select network'}
             className="basic-single my-5 text-center"
@@ -262,16 +317,29 @@ const Home: NextPage = () => {
               }
             }}
           />
-          <input
-            type="text"
-            className="form-control relative my-4 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-center text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
-            placeholder="contract address"
-            aria-label="Search"
-            aria-describedby="button-addon2"
-            value={address || ''}
-            onChange={handleAddressChange}
-            ref={inputElement}
-          />
+          <div className="flex items-center justify-center">
+            <input
+              type="text"
+              className="form-control relative my-4 block w-full min-w-0 flex-auto rounded border border-solid border-gray-300 bg-white bg-clip-padding px-3 py-1.5 text-center text-base font-normal text-gray-700 transition ease-in-out focus:border-blue-600 focus:bg-white focus:text-gray-700 focus:outline-none"
+              placeholder="contract address"
+              aria-label="Search"
+              aria-describedby="button-addon2"
+              value={address || ''}
+              onChange={handleAddressChange}
+              ref={inputElement}
+            />
+            {!!result?.data && (
+              <div className="">
+                <button
+                  className="pl-2 text-purple-600"
+                  onClick={toggleContractSave}
+                >
+                  {!isContractSaved ? 'Save' : 'Unsave'}
+                </button>
+              </div>
+            )}
+          </div>
+
           <div className="text-md my-4">
             <Answer
               loading={loading}

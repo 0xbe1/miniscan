@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import prettier from 'prettier'
-import { Network } from '..'
-import { CodeType, getCode } from './utils'
+import { Network, Result } from '..'
+import { CodeType, getCode, GetCodeData } from './utils'
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<string | { message: string }>
+  res: NextApiResponse<Result<GetCodeData>>
 ) {
   const address = req.query['address'] as string
   const network = req.query['network'] as Network
@@ -13,13 +13,15 @@ export default async function handler(
 
   const getCodeResult = await getCode(address, network, codeType)
   if (getCodeResult.error) {
-    res.status(200).send(getCodeResult.error)
+    res.status(200).send({ error: getCodeResult.error })
   } else {
     let code = getCodeResult.data.Code
     if (codeType === 'ABI') {
       code = formatABI(code)
     }
-    res.status(200).send(code)
+    res.status(200).send({
+      data: { ContractName: getCodeResult.data.ContractName, Code: code },
+    })
   }
 }
 

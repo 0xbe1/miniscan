@@ -21,7 +21,7 @@ export type GetContractData = {
   ABI: string
 }
 
-type GetCodeData = {
+export type GetCodeData = {
   ContractName: string
   Code: string
 }
@@ -258,15 +258,21 @@ function parseSourceCode(sourceCode: string): string {
   try {
     const jsonStr = sourceCode.substring(1, sourceCode.length - 1)
     const obj = JSON.parse(jsonStr)
-    sourceCode = Object.entries<{ content: string }>(obj.sources).reduce(
-      (prev, curr, i) =>
-        prev +
-        '\n' +
-        (i === 0
-          ? curr[1].content
-          : filterOutSolidityFileHeader(curr[1].content)),
-      ''
-    )
+
+    const classes = Object.entries<{ content: string }>(obj.sources).map(([k, v], i) => (i === 0
+      ? v.content
+      : filterOutSolidityFileHeader(v.content)))
+    sourceCode = classes[0]
+    // TODO: uncomment
+    // sourceCode = Object.entries<{ content: string }>(obj.sources).reduce(
+    //   (prev, curr, i) =>
+    //     prev +
+    //     '\n' +
+    //     (i === 0
+    //       ? curr[1].content
+    //       : filterOutSolidityFileHeader(curr[1].content)),
+    //   ''
+    // )
   } catch (error: any) {
     // ignore
   }

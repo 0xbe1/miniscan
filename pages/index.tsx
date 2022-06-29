@@ -7,6 +7,7 @@ import web3 from 'web3'
 import { useQueryState } from 'next-usequerystate'
 import Tweet from '../components/tweet'
 import { config, GetContractData } from './api/utils'
+import Link from 'next/link'
 
 export type Result<T> =
   | {
@@ -142,19 +143,25 @@ const Answer = ({
         <div>
           <p className="text-purple-600">Links</p>
           <div>
-            <a
+            <Link
               className="hover:underline"
-              href={`/api/code?network=${network}&address=${address}&codeType=ABI`}
+              href={{
+                pathname: '/code',
+                query: { network, address, codeType: 'ABI' },
+              }}
             >
-              ABI
-            </a>
+              <a>ABI</a>
+            </Link>
             {' | '}
-            <a
+            <Link
               className="hover:underline"
-              href={`/api/code?network=${network}&address=${address}&codeType=SourceCode`}
+              href={{
+                pathname: '/code',
+                query: { network, address, codeType: 'SourceCode' },
+              }}
             >
-              Code
-            </a>
+              <a>Code</a>
+            </Link>
             {' | '}
             <a
               className="hover:underline"

@@ -21,7 +21,7 @@ export type GetContractData = {
   ABI: string
 }
 
-type GetCodeData = {
+export type GetCodeData = {
   ContractName: string
   Code: string
 }

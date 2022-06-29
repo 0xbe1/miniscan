@@ -7,10 +7,12 @@
   },
   "dependencies": {
     "@types/prettier": "^2.6.0",
+    "@types/prismjs": "^1.26.0",
     "axios": "^0.26.1",
     "next": "latest",
     "next-usequerystate": "^1.7.2",
     "prettier": "^2.6.2",
+    "prismjs": "^1.28.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-select": "^5.2.2",

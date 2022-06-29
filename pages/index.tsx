@@ -283,27 +283,29 @@ const Home: NextPage = () => {
               </a>
             </p>
           </div>
-          <div className="flex pt-3">
-            <div className="pr-2">Saved: </div>
-            {contracts?.map((c, i) => (
-              <>
-                <Link
-                  key={`${c.network}:${c.contractAddress}`}
-                  href={{
-                    pathname: '/',
-                    query: { network: c.network, address: c.contractAddress },
-                  }}
-                >
-                  <button className="text-purple-600 underline">
-                    {c.contractName}
-                  </button>
-                </Link>
-                {i < contracts.length - 1 && (
-                  <span className="px-1 text-purple-600">|</span>
-                )}
-              </>
-            ))}
-          </div>
+          {contracts && contracts.length > 0 && (
+            <div className="flex pt-3">
+              <div className="pr-2">Saved: </div>
+              {contracts.map((c, i) => (
+                <>
+                  <Link
+                    key={`${c.network}:${c.contractAddress}`}
+                    href={{
+                      pathname: '/',
+                      query: { network: c.network, address: c.contractAddress },
+                    }}
+                  >
+                    <button className="text-purple-600 underline">
+                      {c.contractName}
+                    </button>
+                  </Link>
+                  {i < contracts.length - 1 && (
+                    <span className="px-1 text-purple-600">|</span>
+                  )}
+                </>
+              ))}
+            </div>
+          )}
           <Select
             placeholder={'Select network'}
             className="basic-single my-5 text-center"

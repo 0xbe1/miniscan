@@ -68,7 +68,7 @@ const Code: NextPage = () => {
   return (
     <pre>
       <code>
-        <div dangerouslySetInnerHTML={{ __html: html }} />
+        <div className="text-sm" dangerouslySetInnerHTML={{ __html: html }} />
       </code>
     </pre>
   )

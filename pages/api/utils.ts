@@ -89,7 +89,7 @@ export const config: Config = {
   moonriver: {
     scanDomain: 'moonriver.moonscan.io',
     apiDomain: 'api-moonriver.moonscan.io',
-    apiKey: process.env.MOONRIVIER_MOONSCAN_API_KEY || '',
+    apiKey: process.env.MOONRIVER_MOONSCAN_API_KEY || '',
   },
   moonbeam: {
     scanDomain: 'moonbeam.moonscan.io',

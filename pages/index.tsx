@@ -133,7 +133,7 @@ const Answer = ({
     <div>
       <div className="grid grid-cols-3">
         <div>
-          <p className="text-purple-600">Name</p>
+          <p className="text-purple-600 truncate">Name</p>
           <p>{result.data.ContractName}</p>
         </div>
         <div>

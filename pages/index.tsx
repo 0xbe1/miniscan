@@ -5,7 +5,6 @@ import axios from 'axios'
 import Select from 'react-select'
 import web3 from 'web3'
 import { useQueryState } from 'next-usequerystate'
-import Tweet from '../components/tweet'
 import { config, GetContractData } from './api/utils'
 import Link from 'next/link'
 
@@ -239,20 +238,30 @@ const Home: NextPage = () => {
       <main className="flex w-full flex-1 items-center sm:w-4/5 lg:w-1/2">
         <div className="w-full">
           <div className=" text-center">
-            <p className="my-5 text-6xl font-bold text-purple-600">miniscan</p>
-            <p className="my-2 text-xl">Contract deep dive like a pro</p>
-            <p className="text-md text-purple-600">
-              Trusted by devs @{' '}
-              <a className="underline" href="https://messari.io/">
-                Messari
-              </a>{' '}
-              |{' '}
-              <a className="underline" href="https://thegraph.com/">
-                The Graph
-              </a>{' '}
-              |{' '}
-              <a className="underline" href="https://simplefi.finance/">
-                SimpleFi
+            <p className="my-5 text-3xl font-bold text-purple-600">
+              miniscan: a simple contract explorer
+            </p>
+            <p className="">
+              📚 Examples:{' '}
+              <a
+                href="/?address=0x5c69bee701ef814a2b6a3edd4b1652cb9cc5aa6f&network=ethereum"
+                className="underline"
+              >
+                UniswapV2Factory
+              </a>
+              {' | '}
+              <a
+                href="/?address=0x59728544b08ab483533076417fbbb2fd0b17ce3a&network=ethereum"
+                className="underline"
+              >
+                LooksRareExchange
+              </a>
+              {' | '}
+              <a
+                href="/?address=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2&network=ethereum"
+                className="underline"
+              >
+                WETH
               </a>
             </p>
           </div>
@@ -287,13 +296,6 @@ const Home: NextPage = () => {
               result={result}
             />
           </div>
-          <Tweet
-            name="nader dabit (🧱, 🚀) | sha.eth | nader.sol"
-            username="dabit3"
-            tweetUrl="https://twitter.com/dabit3/status/1512089488847257600"
-            authorUrl="https://twitter.com/dabit3"
-            profileImageUrl="https://pbs.twimg.com/profile_images/1546003895687716864/pMJs0GdA_400x400.png"
-          />
         </div>
       </main>
 

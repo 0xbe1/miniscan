@@ -2,9 +2,7 @@ import axios from 'axios'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import Prism from 'prismjs'
-import 'prismjs/components/prism-solidity'
-import 'prismjs/themes/prism-coy.css'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { Result } from '.'
 import { GetCodeData } from './api/utils'
 
@@ -61,16 +59,14 @@ const Code: NextPage = () => {
       </div>
     )
   }
-  const html =
-    codeType === 'ABI'
-      ? Prism.highlight(code, Prism.languages.javascript, 'javascript')
-      : Prism.highlight(code, Prism.languages.solidity, 'solidity')
+
   return (
-    <pre>
-      <code>
-        <div className="text-sm" dangerouslySetInnerHTML={{ __html: html }} />
-      </code>
-    </pre>
+    <SyntaxHighlighter
+      language={codeType === 'ABI' ? 'javascript' : 'solidity'}
+      showLineNumbers
+    >
+      {code}
+    </SyntaxHighlighter>
   )
 }
 

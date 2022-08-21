@@ -87,24 +87,69 @@ const AbiEvent = ({
 }
 
 const ReadContract = ({
+  providerURL,
+  address,
+  abi,
+}: {
+  providerURL: string
+  address: string
+  abi: AbiItem[]
+}) => {
+  const [blockNumber, setBlockNumber] = useState<number | undefined>(undefined)
+  return (
+    <div>
+      <p className="mt-5 text-purple-600">Read contract</p>
+      <details className="px-2">
+        <summary>block number</summary>
+        <input
+          type="number"
+          className="rounded-md border p-1"
+          value={blockNumber}
+          placeholder="latest"
+          onChange={(e) => setBlockNumber(parseInt(e.target.value))}
+        />
+      </details>
+      <div>
+        {abi
+          .filter((e) => e.type === 'function' && e.stateMutability === 'view')
+          .map((e, i) => (
+            <ReadMethod
+              key={i}
+              abi={abi}
+              entry={e}
+              providerURL={providerURL!}
+              address={address}
+              blockNumber={blockNumber}
+            />
+          ))}
+      </div>
+    </div>
+  )
+}
+
+const ReadMethod = ({
   abi,
   entry,
   providerURL,
   address,
+  blockNumber,
 }: {
   abi: AbiItem[]
   entry: AbiItem
   providerURL: string
   address: string
+  blockNumber: number | undefined
 }) => {
   let name = entry.name || '<unknown function>'
   let inputs = entry.inputs || []
   const web3 = new Web3(providerURL)
   const contract = new web3.eth.Contract(abi, address)
+  if (blockNumber) {
+    contract.defaultBlock = blockNumber
+  }
   const typeSig = `${name}(${inputs.map((i) => i.type).join(',')})`
   const functionSelector = web3.utils.keccak256(typeSig).slice(0, 10)
   const fn = contract.methods[functionSelector]
-
   const [args, setArgs] = useState<(string | null)[]>(
     Array(inputs.length).fill(null)
   )
@@ -127,8 +172,11 @@ const ReadContract = ({
     <div className="my-2 rounded-md border">
       <div className="flex justify-between bg-purple-100 p-2">
         <div>{name}</div>
-        <button className="border" onClick={rpc}>
-          🚀
+        <button
+          className="rounded border-purple-600 bg-white px-1"
+          onClick={rpc}
+        >
+          Query
         </button>
       </div>
 
@@ -273,24 +321,7 @@ const Answer = ({
           ))}
       </div>
       {providerURL && (
-        <>
-          <p className="mt-5 text-purple-600">Read contract</p>
-          <div>
-            {abi
-              .filter(
-                (e) => e.type === 'function' && e.stateMutability === 'view'
-              )
-              .map((e, i) => (
-                <ReadContract
-                  key={i}
-                  abi={abi}
-                  entry={e}
-                  providerURL={providerURL!}
-                  address={address}
-                />
-              ))}
-          </div>
-        </>
+        <ReadContract providerURL={providerURL} address={address} abi={abi} />
       )}
     </div>
   )

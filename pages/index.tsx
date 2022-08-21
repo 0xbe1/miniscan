@@ -3,7 +3,8 @@ import Head from 'next/head'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import Select from 'react-select'
-import web3 from 'web3'
+import Web3 from 'web3'
+import { AbiItem } from 'web3-utils'
 import { useQueryState } from 'next-usequerystate'
 import { config, GetContractData } from './api/utils'
 import Link from 'next/link'
@@ -21,17 +22,6 @@ export type Result<T> =
 interface NetworkOption {
   readonly value: Network
   readonly label: string
-}
-
-interface AbiEntry {
-  name: string
-  type: string
-  inputs: Array<{
-    indexed: boolean
-    internalType: string
-    name: string
-    type: string
-  }>
 }
 
 const networkOptions: readonly NetworkOption[] = [
@@ -76,22 +66,103 @@ const AbiEvent = ({
   network,
   address,
 }: {
-  entry: AbiEntry
+  entry: AbiItem
   network: Network
   address: string
 }) => {
-  const { name, inputs } = entry
+  let name = entry.name || '<unknown event>'
+  let inputs = entry.inputs || []
   const typeSig = `${name}(${inputs.map((i) => i.type).join(',')})`
   return (
     <p className="truncate hover:underline">
       <a
         href={`https://${
           config[network].scanDomain
-        }/txs?ea=${address}&topic0=${web3.utils.soliditySha3(typeSig)}`}
+        }/txs?ea=${address}&topic0=${Web3.utils.soliditySha3(typeSig)}`}
       >
         {name}
       </a>
     </p>
+  )
+}
+
+const ReadContract = ({
+  abi,
+  entry,
+  providerURL,
+  address,
+}: {
+  abi: AbiItem[]
+  entry: AbiItem
+  providerURL: string
+  address: string
+}) => {
+  let name = entry.name || '<unknown function>'
+  let inputs = entry.inputs || []
+  const web3 = new Web3(providerURL)
+  const contract = new web3.eth.Contract(abi, address)
+  const typeSig = `${name}(${inputs.map((i) => i.type).join(',')})`
+  const functionSelector = web3.utils.keccak256(typeSig).slice(0, 10)
+  const fn = contract.methods[functionSelector]
+
+  const [args, setArgs] = useState<(string | null)[]>(
+    Array(inputs.length).fill(null)
+  )
+  const [result, setResult] = useState<Result<any> | null>(null)
+  const [loading, setLoading] = useState(false)
+
+  async function rpc() {
+    try {
+      setLoading(true)
+      const res = await fn.apply(null, args).call()
+      setResult({ data: res })
+    } catch (error: any) {
+      setResult({ error: { message: error.message } })
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div className="my-2 rounded-md border">
+      <div className="flex justify-between bg-purple-100 p-2">
+        <div>{name}</div>
+        <button className="border" onClick={rpc}>
+          🚀
+        </button>
+      </div>
+
+      {inputs.map((input, i) => (
+        <div className="space-y-2 p-2">
+          <div>
+            {input.name || '<input>'} ({input.type})
+          </div>
+          <input
+            name={`${name}-${input.name}-${i}`}
+            type="text"
+            className="w-full rounded-md border p-1"
+            value={args[i] || ''}
+            onChange={(e) => {
+              setArgs((oldArgs) => {
+                let newArgs = [...oldArgs]
+                newArgs[i] = e.target.value
+                return newArgs
+              })
+            }}
+          />
+        </div>
+      ))}
+
+      {loading ? (
+        <p className="p-2">loading...</p>
+      ) : !result ? (
+        <></>
+      ) : result?.data ? (
+        <p className="p-2 text-purple-500">{result?.data}</p>
+      ) : (
+        <p className="p-2 text-red-600">{result?.error?.message}</p>
+      )}
+    </div>
   )
 }
 
@@ -127,7 +198,27 @@ const Answer = ({
   if (result.error) {
     return <p className="text-center">❌ {result.error.message}</p>
   }
-  const abi: AbiEntry[] = JSON.parse(result.data.ABI)
+  const abi: AbiItem[] = JSON.parse(result.data.ABI)
+  let providerURL: string | null = null
+  switch (network) {
+    case 'ethereum':
+      providerURL = `https://mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
+      break
+    case 'polygon':
+      providerURL = `https://polygon-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
+      break
+    case 'optimism':
+      providerURL = `https://optimism-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
+      break
+    case 'arbitrum':
+      providerURL = `https://arbitrum-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
+      break
+    case 'aurora':
+      providerURL = `https://aurora-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
+      break
+    default:
+  }
+
   return (
     <div>
       <div className="grid grid-cols-3">
@@ -171,7 +262,9 @@ const Answer = ({
           </div>
         </div>
       </div>
-      <p className="mt-5 text-purple-600">Events (click to view txs)</p>
+      <p className="mt-5 text-purple-600">
+        Events (click to view transactions)
+      </p>
       <div className="grid grid-cols-3 gap-1 text-left">
         {abi
           .filter((e) => e.type === 'event')
@@ -179,6 +272,26 @@ const Answer = ({
             <AbiEvent key={i} entry={e} network={network} address={address} />
           ))}
       </div>
+      {providerURL && (
+        <>
+          <p className="mt-5 text-purple-600">Read contract</p>
+          <div>
+            {abi
+              .filter(
+                (e) => e.type === 'function' && e.stateMutability === 'view'
+              )
+              .map((e, i) => (
+                <ReadContract
+                  key={i}
+                  abi={abi}
+                  entry={e}
+                  providerURL={providerURL!}
+                  address={address}
+                />
+              ))}
+          </div>
+        </>
+      )}
     </div>
   )
 }
@@ -239,7 +352,7 @@ const Home: NextPage = () => {
         <div className="w-full">
           <div className=" text-center">
             <p className="my-5 text-3xl font-bold text-purple-600">
-              miniscan: a simple contract explorer
+              🔍 miniscan: a simple contract explorer
             </p>
             <p className="">
               📚 Examples:{' '}

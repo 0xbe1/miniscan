@@ -150,8 +150,8 @@ const ReadMethod = ({
   const typeSig = `${name}(${inputs.map((i) => i.type).join(',')})`
   const functionSelector = web3.utils.keccak256(typeSig).slice(0, 10)
   const fn = contract.methods[functionSelector]
-  const [args, setArgs] = useState<(string | null)[]>(
-    Array(inputs.length).fill(null)
+  const [args, setArgs] = useState<(string | undefined)[]>(
+    Array(inputs.length).fill(undefined)
   )
   const [result, setResult] = useState<Result<any> | null>(null)
   const [loading, setLoading] = useState(false)
@@ -189,7 +189,7 @@ const ReadMethod = ({
             name={`${name}-${input.name}-${i}`}
             type="text"
             className="w-full rounded-md border p-1"
-            value={args[i] || ''}
+            value={args[i]}
             onChange={(e) => {
               setArgs((oldArgs) => {
                 let newArgs = [...oldArgs]

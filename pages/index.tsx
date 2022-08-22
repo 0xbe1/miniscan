@@ -288,7 +288,7 @@ const Answer = ({
                 query: { network, address, codeType: 'ABI' },
               }}
             >
-              <a>ABI</a>
+              <a target="_blank">ABI</a>
             </Link>
             {' | '}
             <Link
@@ -298,12 +298,13 @@ const Answer = ({
                 query: { network, address, codeType: 'SourceCode' },
               }}
             >
-              <a>Code</a>
+              <a target="_blank">Code</a>
             </Link>
             {' | '}
             <a
               className="hover:underline"
               href={`https://${config[network].scanDomain}/address/${address}`}
+              target="_blank"
             >
               Explorer
             </a>

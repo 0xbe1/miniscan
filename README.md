@@ -1,6 +1,11 @@
 # miniscan
 
+A simple contract explorer.
+
 ## Testing
+
+<details>
+<summary>Contract addresses</summary>
 
 arbitrum: 0xfd086bc7cd5c481dcc9c85ebe478a1c0b69fcbb9
 
@@ -27,3 +32,5 @@ polygon: 0xc2132d05d31c914a87c6611c10748aeb04b58e8f
 moonriver: 0xe3f5a90f9cb311505cd691a46596599aa1a0ad7d
 
 moonbeam: 0xacc15dc74880c9944775448304b263d191c6077f
+
+</details>

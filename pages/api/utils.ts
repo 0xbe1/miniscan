@@ -72,8 +72,8 @@ export const config: Config = {
     apiKey: process.env.OPTIMISTIC_ETHERSCAN_API_KEY || '',
   },
   celo: {
-    scanDomain: 'celoscan.xyz',
-    apiDomain: 'api.celoscan.xyz',
+    scanDomain: 'celoscan.io',
+    apiDomain: 'api.celoscan.io',
     apiKey: process.env.CELOSCAN_API_KEY || '',
   },
   gnosis: {

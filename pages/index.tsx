@@ -173,7 +173,7 @@ const ReadMethod = ({
       <div className="flex justify-between bg-purple-100 p-2">
         <div>{name}</div>
         <button
-          className="rounded border-purple-600 bg-white px-1"
+          className="rounded border-purple-600 border-2 bg-white px-1"
           onClick={rpc}
         >
           Query

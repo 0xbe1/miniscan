@@ -264,6 +264,9 @@ const Answer = ({
     case 'aurora':
       providerURL = `https://aurora-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
       break
+    case 'bsc':
+      providerURL = `https://sly-indulgent-energy.bsc.discover.quiknode.pro/56be204298017a6fc0b71324d418b098bc40840f`
+      break
     default:
   }
 

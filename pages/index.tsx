@@ -267,6 +267,12 @@ const Answer = ({
     case 'bsc':
       providerURL = `https://sly-indulgent-energy.bsc.discover.quiknode.pro/56be204298017a6fc0b71324d418b098bc40840f`
       break
+    case 'moonbeam':
+      providerURL = 'https://rpc.ankr.com/moonbeam'
+      break
+    case 'moonriver':
+      providerURL = 'https://moonriver.public.blastapi.io'
+      break
     default:
   }
 

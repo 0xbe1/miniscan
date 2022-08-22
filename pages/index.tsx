@@ -103,7 +103,7 @@ const ReadContract = ({
         <summary>block number</summary>
         <input
           type="number"
-          className="rounded-md border p-1"
+          className="rounded-md border p-1 mt-2"
           value={blockNumber}
           placeholder="latest"
           onChange={(e) => setBlockNumber(parseInt(e.target.value))}

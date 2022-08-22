@@ -77,9 +77,9 @@ export const config: Config = {
     apiKey: process.env.CELOSCAN_API_KEY || '',
   },
   gnosis: {
-    scanDomain: 'blockscout.com/xdai/mainnet',
-    apiDomain: 'blockscout.com/xdai/mainnet',
-    apiKey: '', // no api key needed
+    scanDomain: 'gnosisscan.io',
+    apiDomain: 'api.gnosisscan.io',
+    apiKey: process.env.GNOSISSCAN_API_KEY || '',
   },
   hsc: {
     scanDomain: 'hooscan.com',
@@ -146,7 +146,7 @@ async function _getStartBlock(
     }
     return {
       error: {
-        message: data.message,
+        message: `${data.message} ${data.result}`,
       },
     }
   } catch (error: any) {
@@ -180,7 +180,7 @@ export async function getCode(
     if (data.status === '0') {
       return {
         error: {
-          message: data.message,
+          message: `${data.message} ${data.result}`,
         },
       }
     }

@@ -33,4 +33,6 @@ moonriver: 0xe3f5a90f9cb311505cd691a46596599aa1a0ad7d
 
 moonbeam: 0xacc15dc74880c9944775448304b263d191c6077f
 
+gnosis: 0x2160a64ea2de397963e3740c2aa9efaa08bb711a
+
 </details>

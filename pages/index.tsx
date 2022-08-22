@@ -33,7 +33,7 @@ const networkOptions: readonly NetworkOption[] = [
   { value: 'cronos', label: 'Cronos' },
   { value: 'ethereum', label: 'Ethereum' },
   { value: 'fantom', label: 'Fantom' },
-  { value: 'gnosis', label: 'Gnosis (API unreliable)' },
+  { value: 'gnosis', label: 'Gnosis' },
   { value: 'hsc', label: 'HSC' },
   { value: 'moonbeam', label: 'Moonbeam' },
   { value: 'moonriver', label: 'Moonriver' },
@@ -103,7 +103,7 @@ const ReadContract = ({
         <summary>block number</summary>
         <input
           type="number"
-          className="rounded-md border p-1 mt-2"
+          className="mt-2 rounded-md border p-1"
           value={blockNumber}
           placeholder="latest"
           onChange={(e) => setBlockNumber(parseInt(e.target.value))}

@@ -206,7 +206,7 @@ const ReadMethod = ({
       ) : !result ? (
         <></>
       ) : result?.data ? (
-        <p className="p-2 text-purple-500">{result?.data}</p>
+        <p className="p-2">{result?.data}</p>
       ) : (
         <p className="p-2 text-red-600">{result?.error?.message}</p>
       )}

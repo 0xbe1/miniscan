@@ -173,7 +173,7 @@ const ReadMethod = ({
       <div className="flex justify-between bg-purple-100 p-2">
         <div>{name}</div>
         <button
-          className="rounded border-purple-600 border-2 bg-white px-1"
+          className="rounded border-2 border-purple-600 bg-white px-1"
           onClick={rpc}
         >
           Query
@@ -205,10 +205,10 @@ const ReadMethod = ({
         <p className="p-2">loading...</p>
       ) : !result ? (
         <></>
-      ) : result?.data ? (
-        <p className="p-2">{result?.data}</p>
+      ) : result.error ? (
+        <p className="p-2 text-red-600">{result.error.message}</p>
       ) : (
-        <p className="p-2 text-red-600">{result?.error?.message}</p>
+        <p className="p-2">{JSON.stringify(result.data, null, 2)}</p>
       )}
     </div>
   )
@@ -265,13 +265,25 @@ const Answer = ({
       providerURL = `https://aurora-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_PROJECT_ID}`
       break
     case 'bsc':
-      providerURL = `https://sly-indulgent-energy.bsc.discover.quiknode.pro/56be204298017a6fc0b71324d418b098bc40840f`
+      providerURL = 'https://rpc.ankr.com/bsc'
       break
     case 'moonbeam':
       providerURL = 'https://rpc.ankr.com/moonbeam'
       break
     case 'moonriver':
       providerURL = 'https://moonriver.public.blastapi.io'
+      break
+    case 'avalanche':
+      providerURL = 'https://rpc.ankr.com/avalanche'
+      break
+    case 'celo':
+      providerURL = 'https://rpc.ankr.com/celo'
+      break
+    case 'gnosis':
+      providerURL = 'https://rpc.ankr.com/gnosis'
+      break
+    case 'fantom':
+      providerURL = 'https://rpc.ankr.com/fantom'
       break
     default:
   }

@@ -107,14 +107,34 @@ export async function getStartBlock(
   address: string,
   network: Network
 ): Promise<Result<number>> {
-  let getStartBlockResult = await _getStartBlock(address, network, 'txlist')
-  if (
-    getStartBlockResult.error &&
-    getStartBlockResult.error.message === 'No transactions found'
-  ) {
-    return _getStartBlock(address, network, 'txlistinternal')
+  let getStartBlockResult_tx = await _getStartBlock(address, network, 'txlist')
+  let getStartBlockResult_txinternal = await _getStartBlock(
+    address,
+    network,
+    'txlistinternal'
+  )
+  if (getStartBlockResult_tx.data && getStartBlockResult_txinternal.data) {
+    return {
+      data: Math.min(
+        getStartBlockResult_tx.data,
+        getStartBlockResult_txinternal.data
+      ),
+    }
+  } else if (getStartBlockResult_tx.data) {
+    return {
+      data: getStartBlockResult_tx.data,
+    }
+  } else if (getStartBlockResult_txinternal.data) {
+    return {
+      data: getStartBlockResult_txinternal.data,
+    }
+  } else {
+    return {
+      error: {
+        message: `txlist: ${getStartBlockResult_tx.error?.message}, txlistinternal: ${getStartBlockResult_txinternal.error?.message}`,
+      },
+    }
   }
-  return getStartBlockResult
 }
 
 async function _getStartBlock(

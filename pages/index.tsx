@@ -7,6 +7,7 @@ import Web3 from 'web3'
 import { AbiItem } from 'web3-utils'
 import { useQueryState } from 'next-usequerystate'
 import { config, GetContractData } from './api/utils'
+import { useCopyToClipboard } from 'react-use'
 import Link from 'next/link'
 
 export type Result<T> =
@@ -79,6 +80,7 @@ const AbiEvent = ({
         href={`https://${
           config[network].scanDomain
         }/txs?ea=${address}&topic0=${Web3.utils.soliditySha3(typeSig)}`}
+        target="_blank"
       >
         {name}
       </a>
@@ -285,44 +287,51 @@ const Answer = ({
     case 'fantom':
       providerURL = 'https://rpc.ankr.com/fantom'
       break
-    case 'cronos':
-      providerURL = 'https://rpc.vvs.finance'
-      break
     default:
   }
+
+  const [clipboard, copyToClipboard] = useCopyToClipboard()
 
   return (
     <div>
       <div className="grid grid-cols-3">
         <div>
           <p className="text-purple-600">Name</p>
-          <p className="truncate">{result.data.ContractName}</p>
+          <p 
+            className="truncate cursor-copy text-black-600"
+            onClick={() =>
+              copyToClipboard(result.data.ContractName.toString())
+            }
+          >{result.data.ContractName}</p>
         </div>
         <div>
           <p className="text-purple-600">Start Block</p>
-          <p>{result.data.StartBlock}</p>
+          <p
+            className="cursor-copy text-black-600"
+            onClick={() =>
+              copyToClipboard(result.data.StartBlock.toString())
+            }
+          >{result.data.StartBlock}</p>
         </div>
         <div>
           <p className="text-purple-600">Links</p>
           <div>
             <Link
-              className="hover:underline"
               href={{
                 pathname: '/code',
                 query: { network, address, codeType: 'ABI' },
               }}
             >
-              <a target="_blank">ABI</a>
+              <a className="hover:underline" target="_blank">ABI</a>
             </Link>
             {' | '}
             <Link
-              className="hover:underline"
               href={{
                 pathname: '/code',
                 query: { network, address, codeType: 'SourceCode' },
               }}
             >
-              <a target="_blank">Code</a>
+              <a className="hover:underline" target="_blank">Code</a>
             </Link>
             {' | '}
             <a
@@ -335,6 +344,17 @@ const Answer = ({
           </div>
         </div>
       </div>
+      {clipboard.error ? (
+      <div className="my-3 rounded-md border border-red-600 p-2 text-sm text-red-600">
+        Unable to copy value: {clipboard.error.message}
+      </div>
+      ) : (
+        clipboard.value && (
+          <div className="my-3 rounded-md border border-green-600 p-2 text-sm text-green-600">
+            Copied {clipboard.value}
+          </div>
+        )
+      )}
       <p className="mt-5 text-purple-600">
         Events (click to view transactions)
       </p>

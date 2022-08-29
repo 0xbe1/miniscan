@@ -285,6 +285,9 @@ const Answer = ({
     case 'fantom':
       providerURL = 'https://rpc.ankr.com/fantom'
       break
+    case 'cronos':
+        providerURL = 'https://rpc.vvs.finance'
+        break
     default:
   }
 

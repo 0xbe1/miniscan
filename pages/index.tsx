@@ -62,6 +62,56 @@ function validateAddress(address: string): boolean {
   return /^0x[0-9a-fA-F]{40}$/.test(address)
 }
 
+const CallFormat = ({
+  output,
+}: {
+  output: string
+}) => {
+
+  const [clipboard, copyToClipboard] = useCopyToClipboard()
+
+  return (
+    <div>
+      <p 
+        className="truncate cursor-copy text-black-600"
+        onClick={() => copyToClipboard(output)}
+      >{output}</p>
+
+      {clipboard.error ? (
+        <div className="my-3 rounded-md border border-red-600 p-2 text-sm text-red-600">
+          Unable to copy value: {clipboard.error.message}
+        </div>
+      ) : (
+        clipboard.value && (
+          <div className="my-3 rounded-md border border-green-600 p-2 text-sm text-green-600">
+            Copied {clipboard.value}
+          </div>
+        )
+      )}
+    </div>
+  )
+}
+
+const AddressLink = ({
+  network,
+  address,
+}: {
+  network: Network
+  address: string
+}) => {
+  let url = `https://miniscan.xyz/?network=${network}&address=${address}`
+  return (
+    <p className="truncate text-blue-600 hover:underline">
+      <a
+        href={url}
+        target="_blank"
+      >
+        {address}
+      </a>
+    </p>
+  )
+}
+
 const AbiEvent = ({
   entry,
   network,
@@ -92,10 +142,12 @@ const ReadContract = ({
   providerURL,
   address,
   abi,
+  network,
 }: {
   providerURL: string
   address: string
   abi: AbiItem[]
+  network: Network | null
 }) => {
   const [blockNumber, setBlockNumber] = useState<number | undefined>(undefined)
   return (
@@ -122,6 +174,7 @@ const ReadContract = ({
               providerURL={providerURL!}
               address={address}
               blockNumber={blockNumber}
+              network={network!}
             />
           ))}
       </div>
@@ -135,12 +188,14 @@ const ReadMethod = ({
   providerURL,
   address,
   blockNumber,
+  network
 }: {
   abi: AbiItem[]
   entry: AbiItem
   providerURL: string
   address: string
   blockNumber: number | undefined
+  network: Network
 }) => {
   let name = entry.name || '<unknown function>'
   let inputs = entry.inputs || []
@@ -170,12 +225,19 @@ const ReadMethod = ({
     }
   }
 
+  function isAddress(element: string) {
+    if (element.length == 42 && element.includes("0x", 0)) {
+      return true;
+    }
+    return false;
+  }
+
   return (
     <div className="my-2 rounded-md border">
       <div className="flex justify-between bg-purple-100 p-2">
         <div>{name}</div>
         <button
-          className="rounded border-2 border-purple-600 bg-white px-1"
+          className="rounded border-2 border-purple-600 bg-white px-1 button-fancy"
           onClick={rpc}
         >
           Query
@@ -210,7 +272,16 @@ const ReadMethod = ({
       ) : result.error ? (
         <p className="p-2 text-red-600">{result.error.message}</p>
       ) : (
-        <p className="p-2">{JSON.stringify(result.data, null, 2)}</p>
+        // console.log(Array.isArray(result.data))
+        <div className="p-2">
+          { (Array.isArray(result.data)) ?
+            result.data.map((row: any) => (
+              (isAddress(row)) ? <AddressLink key={row} network={network} address={row} /> : <CallFormat key={row} output={row.toString()} />
+            ))
+            :
+            (isAddress(result.data)) ? <AddressLink key={result.data} network={network} address={result.data} /> : <CallFormat key={result.data} output={result.data.toString()} />
+          }
+        </div>
       )}
     </div>
   )
@@ -366,7 +437,7 @@ const Answer = ({
           ))}
       </div>
       {providerURL && (
-        <ReadContract providerURL={providerURL} address={address} abi={abi} />
+        <ReadContract providerURL={providerURL} address={address} abi={abi} network={network} />
       )}
     </div>
   )

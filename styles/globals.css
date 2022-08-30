@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.button-fancy:hover {
+	background-color: #dad1e5;
+}
+
+.button-fancy:active {
+	background-color: #c2bacb;
+}

@@ -79,6 +79,7 @@ const AbiEvent = ({
         href={`https://${
           config[network].scanDomain
         }/txs?ea=${address}&topic0=${Web3.utils.soliditySha3(typeSig)}`}
+        target="_blank"
       >
         {name}
       </a>

@@ -9,6 +9,7 @@
     "@types/prettier": "^2.6.0",
     "@types/prismjs": "^1.26.0",
     "@types/react-syntax-highlighter": "^15.5.4",
+    "@vercel/analytics": "^0.1.5",
     "axios": "^0.26.1",
     "next": "latest",
     "next-usequerystate": "^1.7.2",
